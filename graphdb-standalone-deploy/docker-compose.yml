@@ -6,8 +6,13 @@ services:
     image: khaller/graphdb-free:1.3.5-graphdb9.11.2
     restart: always
     environment: 
-      - GDB_HEAP_SIZE=12G
+      GDB_JAVA_OPTS: >-
+        -Xmx12g -Xms12g
     ports: 
       - 7200:7200
     volumes:
-      - ./gdb-data:/opt/graphdb/data
+      - ./gdb/data:/opt/graphdb/data
+      - ./gdb-import:/root/graphdb-import
+      - ./gdb/work:/opt/graphdb/work
+      - ./gdb/conf:/opt/graphdb/conf
+      - ./gdb/log:/opt/graphdb/log
