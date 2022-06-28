@@ -1,0 +1,5 @@
+
+dev.graph.geoconnex.us {
+   reverse_proxy graphdb:7200
+}
+
