@@ -34,6 +34,11 @@ export GLEANER_MEILI=${GLEANER_BASE}/datavol/data.ms
 export GLEANER_GRAPH=${GLEANER_BASE}/datavol/graph
 export GLEANER_GRAPH_CONF=${GLEANER_BASE}/config
 export GLEANER_TRAEFIK=${GLEANER_BASE}/config
+# build out the paths for good measure
+mkdir --parents ${GLEANER_OBJECTS}
+mkdir --parents ${GLEANER_MEILI}
+mkdir --parents ${GLEANER_GRAPH}
+mkdir --parents ${GLEANER_GRAPH_CONF}
 
 # domains
 export GLEANER_DOMAIN=local.dev
@@ -60,6 +65,13 @@ difficult elements of the setup.
 ### Running Server Arch
 
 Outline of steps to run:
+
+* ```git clone https://github.com/internetofwater/harvest.geoconnex.us``` to pull down the configuration templates
+* ```cd harvest.geoconnex.us/confgis```
+  
+    We will now need to update the setenv.sh environment variables.  
+
+* ```
 
 ### Running Harvest
 
