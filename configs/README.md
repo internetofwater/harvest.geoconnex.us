@@ -50,7 +50,7 @@ export GLEANER_WEB2_DOMAIN=search.${GLEANER_DOMAIN}
 ```
 
 The main items we need to set in this file are the ACCESS and SECRET keys for our
-[Minio](https://min.io/) installation.  We use Minio as the S3 API compatible object store.  You could also use AWS S3, Google Cloud Storage, SWift or any of a number of S3 compatible object stores.  
+[Minio](https://min.io/) installation.  We use Minio as the S3 API compatible object store.  You could also use AWS S3, Google Cloud Storage, Swift or any of a number of S3 compatible object stores.  
 
 The other items to set include the base location on the local disk for things like 
 logs, temp files and the like.  Set GLEANER_BASE as the top level of this location which will be used to build out the remaining paths.  
@@ -71,8 +71,17 @@ Outline of steps to run:
   
     We will now need to update the setenv.sh environment variables.  
 
-* ```
+* ```docker-compose -f compose.yaml up -d```
+* ```caddy start```  
+
+
 
 ### Running Harvest
+
+Source sitemap is at:  https://geoconnex.us/sitemap.xml  
+
+Zip file is at:  https://github.com/internetofwater/geoconnex.us/blob/master/PID-server/backup/sitemap.zip  
+
+
 
 ### Checking Graph
