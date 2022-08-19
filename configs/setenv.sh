@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Object store keys
@@ -15,8 +14,9 @@ export GLEANER_GRAPH_CONF=${GLEANER_BASE}/config
 export GLEANER_TRAEFIK=${GLEANER_BASE}/config
 
 # domains
-export GLEANER_ADMIN_DOMAIN=admin.local.dev
-export GLEANER_OSS_DOMAIN=oss.local.dev
-export GLEANER_GRAPH_DOMAIN=graph.local.dev
-export GLEANER_WEB_DOMAIN=search.local.dev
-export GLEANER_WEB2_DOMAIN=search.local.dev
+export GLEANER_DOMAIN=local.dev
+export GLEANER_ADMIN_DOMAIN=admin.${GLEANER_DOMAIN}
+export GLEANER_OSS_DOMAIN=oss.${GLEANER_DOMAIN}
+export GLEANER_GRAPH_DOMAIN=graph.${GLEANER_DOMAIN}
+export GLEANER_WEB_DOMAIN=search.${GLEANER_DOMAIN}
+export GLEANER_WEB2_DOMAIN=search.${GLEANER_DOMAIN}
