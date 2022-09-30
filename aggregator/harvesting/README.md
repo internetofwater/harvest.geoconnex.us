@@ -33,7 +33,8 @@ minio:
 ```
 
 Note that bucket names must follow S3 convention/limits on characters.  So underscores, upper case 
-and some other characters can not be used.  
+and some other characters can not be used.  See [AWS Bucket Name Rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)) 
+for guidance.   
 
 You will need to run the script to have Gleaner setup it's initial template in the object store.
 This will likely be removed soon as Gleaner will simply check for first run and do this on its own. 
