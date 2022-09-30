@@ -1,3 +1,5 @@
+.idea/
+.DS_Store
 **/secret/
 .Rproj.user
 .Rhistory
