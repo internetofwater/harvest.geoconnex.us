@@ -46,7 +46,7 @@ exec podman run \
   --interactive --tty --rm \
   --volume "$PWD":/gleaner/wd \
   --workdir /gleaner/wd \
-  "docker.io/fils/gleaner:v3.0.8-development-df" "$@"
+  "docker.io/fils/gleaner:v3.0.9-development-df" "$@"
 
 # Docker:  current docker command to do local volume mounts
 #exec docker run \
