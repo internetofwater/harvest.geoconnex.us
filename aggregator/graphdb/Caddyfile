@@ -1,0 +1,11 @@
+(cors) {
+        @origin header Origin *
+        header @origin Access-Control-Allow-Origin *
+        header @origin Access-Control-Request-Method *
+        header @origin Access-Control-Request-Headers *
+}
+
+dev.graph.geoconnex.us {
+   reverse_proxy graphdb:7200
+}
+
