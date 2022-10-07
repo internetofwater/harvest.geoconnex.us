@@ -4,6 +4,15 @@
 
 This section contains code and resources for the end user of the system.  This would include notebooks, query examples and other material.
 
+## Notebooks
+
+The web architecture approach for the GeoConnex metadata means that a wide range of existing tooling is available to use out of box.  Leveraging this some basic Jupyter notebooks are being developed with the intention that they provide a reference for others to build more focused and mission or policy drive tools from.  
+
+This work in progress includes:
+
+* [query example to the graph](./notebooks/IoWSPARQL.ipynb)
+* [data overview examples](./notebooks/IoWreport.ipynb)
+
 ## Web
 
 The web interface is build completely in HTML and Javascript. 
