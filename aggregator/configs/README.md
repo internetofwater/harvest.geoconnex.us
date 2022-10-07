@@ -82,6 +82,3 @@ Source sitemap is at:  https://geoconnex.us/sitemap.xml
 
 Zip file is at:  https://github.com/internetofwater/geoconnex.us/blob/master/PID-server/backup/sitemap.zip  
 
-
-
-### Checking Graph

@@ -1,0 +1,13 @@
+<ns0:backup xmlns:ns0="urn:csiro:xmlns:pidsvc:backup:1.0" type="partial" scope="record">
+  <ns0:mapping>
+    <ns0:path>^/usgs/monitoring-location/([a-zA-Z0-9_]*)$</ns0:path>
+    <ns0:type>Regex</ns0:type>
+    <ns0:title>USGS Monitoring Locations</ns0:title>
+    <ns0:creator>iow</ns0:creator>
+    <ns0:action>
+      <ns0:type>303</ns0:type>
+      <ns0:name>location</ns0:name>
+      <ns0:value>https://waterdata.usgs.gov/monitoring-location/$1</ns0:value>
+    </ns0:action>
+  </ns0:mapping>
+</ns0:backup>

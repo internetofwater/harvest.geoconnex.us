@@ -1,3 +1,5 @@
+![pub](docs/images/logo.png)
+
 # harvest geoconnex.us
 
 ## About

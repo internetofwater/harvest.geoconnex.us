@@ -17,6 +17,7 @@ mc_cmd() {
 # If you use this for ntriples, be sure to add in a graph in the URL target
 for i in $(mc_cmd $1); do
     echo $i
-    mc cat $1/$i | curl  -H 'Content-Type: application/json' -X POST -d @- http://127.0.0.1:7700/indexes/movies/documents 
+    #mc cat $1/$i | curl  -H 'Content-Type: application/json' -X POST -d @- http://127.0.0.1:7700/indexes/movies/documents 
+    mc cat $1/$i | curl  -H 'Content-Type: application/json' -X POST -d @- https://index.geoconnex.us/indexes/iow/documents 
 done
 
