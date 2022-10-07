@@ -21,9 +21,21 @@ and linked from here.
 
 The following represent a set of reference implementation for the GeoConnex architecture.  
 
-https://oss.geoconnex.us 
+### Object Store
+
+https://oss.geoconnex.us
+
+### Graph
+
 https://graph.geoconnex.us  
+
+### Other Indexes
+
 https://index.geoconnex.us  
+
+
+### Reference interfaces
+
 https://search.geoconnex.us  
 
 ## Personas

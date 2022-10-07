@@ -13,7 +13,6 @@ We will use the configuration files in [harvest.geoconnex.us](https://github.com
 
 ### Environment
 
-
 The setenv.sh is an example script for setting the environment variables for 
 your local install.  This might also be done in a secrets store or some other method
 that aligns with your local environment.  For now we will use this as an example 
@@ -49,6 +48,10 @@ export GLEANER_WEB_DOMAIN=search.${GLEANER_DOMAIN}
 export GLEANER_WEB2_DOMAIN=search.${GLEANER_DOMAIN}
 ```
 
+> Note: you can also place these into the Docker .env pattern
+> as well if that works better in your deployment approaches.
+> See the [Docker environment file documentation](https://docs.docker.com/compose/env-file/) for more details.
+
 The main items we need to set in this file are the ACCESS and SECRET keys for our
 [Minio](https://min.io/) installation.  We use Minio as the S3 API compatible object store.  You could also use AWS S3, Google Cloud Storage, Swift or any of a number of S3 compatible object stores.  
 
@@ -61,6 +64,13 @@ Note that the networking setup, especially for a local network off the main Inte
 difficult elements of the setup.  
 
 ### Settings
+
+There are two main configuration files in this section.  They are:
+
+* [aggregator/configs/iowcompose_volumes.yml](aggregator/configs/iowcompose_volumes.yml)
+* [aggregator/configs/iowcompose.yml](aggregator/configs/iowcompose.yml)
+
+The primary difference is that the _volumes version of these configuration files leverages the Docker volumes approach and the other expects a local file system mount.  The fs approach can be easier in local or development approaches where you want an easy to access location for collected objects.  The volume approach is likely more interesting in a deployed version.  
 
 ### Running Server Arch
 
