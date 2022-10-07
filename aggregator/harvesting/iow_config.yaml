@@ -2,8 +2,8 @@
 minio:
   address: 192.168.202.114
   port: 49155
-  accessKey: KEY
-  secretKey: SECRET
+  accessKey:
+  secretKey:
   ssl: false
   bucket: iow
 gleaner:
@@ -33,7 +33,7 @@ sources:
   headless: false
   pid: http://hdl.handle.net/1834/41372
   propername: refstates
-  domain: https://example.org
+  domain: https://geoconnex.us
   active: true
 - sourcetype: sitemap
   name: damspids
@@ -42,7 +42,7 @@ sources:
   headless: false
   pid: http://hdl.handle.net/1834/41372
   propername: damspids
-  domain: https://example.org
+  domain: https://geoconnex.us
   active: true
 - sourcetype: sitemap
   name: refgage
@@ -51,6 +51,24 @@ sources:
   headless: false
   pid: http://hdl.handle.net/1834/41372
   propername: refgage
-  domain: https://example.org
+  domain: https://geoconnex.us
+  active: true
+- sourcetype: sitemap
+  name: wade5
+  logo: ""
+  url: https://geoconnex.us/sitemap/wade/wade__5.xml
+  headless: false
+  pid: http://hdl.handle.net/1834/41372
+  propername: wade5
+  domain: https://geoconnex.us
+  active: true
+- sourcetype: sitemap
+  name: wade7
+  logo: ""
+  url: https://geoconnex.us/sitemap/wade/wade__7.xml
+  headless: false
+  pid: http://hdl.handle.net/1834/41372
+  propername: wade7
+  domain: https://geoconnex.us
   active: true
 

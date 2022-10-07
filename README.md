@@ -1,4 +1,4 @@
-# harvest.geoconnex.us
+# harvest geoconnex.us
 
 ## About
 
@@ -8,10 +8,13 @@ the geoconnex knowledge graph.
 
 ## Personas
 
+![pub](docs/images/persona.png)
+
 This repository is divided up into these three related personas.  Some of the information 
 for these personas is located in other GeoConnex repositories.  
 
 ### Persona: Publisher
+
 
 The Publisher is engaged authoring the JSON-LD documents and publishing them to the web. This persona is focused on describing and presenting structured data on the web to aid in the discovery and use the resources they manage.  
 Additionally, this persona would be leveraging this encoding described in GeoConnex guidance. 
