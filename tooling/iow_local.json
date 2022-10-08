@@ -1,0 +1,60 @@
+{
+  "minio": {
+    "address": "192.168.202.114",
+    "port": 49155,
+    "accessKey":
+    "secretKey":
+    "ssl": false,
+    "bucket": "gleaner.iow"
+  },
+  "gleaner": {
+    "runid": "iow",
+    "summon": true,
+    "mill": false
+  },
+  "context": {
+    "cache": true
+  },
+  "contextmaps": [
+    {
+      "prefix": "https://schema.org/",
+      "file": "./jsonldcontext.json"
+    },
+    {
+      "prefix": "http://schema.org/",
+      "file": "./jsonldcontext.json"
+    }
+  ],
+  "summoner": {
+    "after": "",
+    "mode": "full",
+    "threads": 10,
+    "delay": 0,
+    "headless": "http://ghost.lan:9222"
+  },
+  "millers": {
+    "graph": false
+  },
+  "sources": [
+    {
+      "sourcetype": "sitemap",
+      "name": "refstates",
+      "url": "https://geoconnex.us/sitemap/ref/states/states__0.xml",
+      "headless": false,
+      "pid": "https://gleaner.io/genid/geoconnex",
+      "propername": "GeoConnex",
+      "domain": "https://geoconnex.us",
+      "active": true
+    },
+    {
+      "sourcetype": "sitemap",
+      "name": "refstate26",
+      "url": "https://geoconnex.us/ref/states/26",
+      "headless": false,
+      "pid": "https://gleaner.io/genid/geoconnex",
+      "propername": "GeoConnex",
+      "domain": "https://geoconnex.us",
+      "active": true
+    }
+  ]
+}
