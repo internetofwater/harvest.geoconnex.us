@@ -1,8 +1,17 @@
 # Future directions
 
+
+
+
 ## Workflows
 
-Dagster
+Dagster or Airflow  
+
+![portainer](./images/portainer.png)
+
+
+![dagstger](./images/dagster.png)
+
 
 
 ## Spatial Discrete Grids
