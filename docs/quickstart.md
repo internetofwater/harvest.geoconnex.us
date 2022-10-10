@@ -79,5 +79,19 @@ sources:
 
 ## Quick Start object loading
 
-material here
+The final exmaple step is the loading of the harvested resources into an index.  The 
+primary index is a triplestore such as Jena or GraphDB.  The following commands along
+with the associated config file can be used to load resources into a designated triplestore.  
+
+```
+ ./nabuDocker.sh  --cfg /nabu/wd/iow_nabu.yaml  prefix -s summoned/gages21
+```
+
+which is a scripting wrapping the Docker command similar to 
+
+```
+podman run --privileged --network=host --interactive --tty --rm --volume "$PWD":/nabu/wd --workdir /nabu/wd "localhost/fils/nabu:2.0.1-developement" --cfg /nab
+u/wd/iow_nabu.yaml  prefix -s summoned/gages21
+```
+
 

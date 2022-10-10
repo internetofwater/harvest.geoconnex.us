@@ -6,6 +6,9 @@ The documentation is broken down by the repository structure and also by
 the roles (personas).  Additionally background
 material is present on the various architecture and formats relevant to the work. 
 
+* [Quick Start](./quickstart.md)
+* [Future directions](./future.md)
+
 ## Document index
 Additional documentation is located in the various sections of this repository 
 and linked from here.
@@ -89,10 +92,9 @@ very easy to process JSON-LD documents directly into Meilisearch to explore text
 ### Reference interfaces
 
 The architecture is designed to support multiple approaches to interacting with the data.  
-Examples of this include:
+These include notebook and web based approaches.
 
-* one
-* two
+Examples of these interfaces will be linked to this documentation.  
 
 #### Example
 
