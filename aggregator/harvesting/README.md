@@ -48,3 +48,4 @@ Then run the script to index.
 ```
 ./cliGleaner.sh  -a docker -cfg /wd/iow_config.yaml  -source damspids -rude
 ```
+

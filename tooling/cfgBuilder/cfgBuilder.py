@@ -1,12 +1,9 @@
 import json
 import yaml
 
-sources = []
-
 # Using readlines()
-file1 = open('xmlloc.txt', 'r')
-Lines = file1.readlines()
-
+f = open('xmlloc.txt', 'r')
+Lines = f.readlines()
 
 # >>> from urllib.parse import urlparse
 # >>> urlparse("scheme://netloc/path;parameters?query#fragment")
@@ -15,6 +12,7 @@ Lines = file1.readlines()
 # >>> o = urlparse("http://docs.python.org:80/3/library/urllib.parse.html?"
                  # ...              "highlight=params#url-parsing")
 
+sources = []
 count = 0
 # Strips the newline character
 for line in Lines:
@@ -32,9 +30,9 @@ for line in Lines:
     data["active"] = "true"
     sources.append(data)
 
-json_data = json.dumps(sources)
-print(json_data)
+# json_data = json.dumps(sources)
+# print(json_data)
 
-with open('data.yml', 'w') as outfile:
+with open('sources.yml', 'w') as outfile:
         yaml.dump(sources, outfile, default_flow_style=False)
 
