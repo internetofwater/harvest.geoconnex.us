@@ -30,7 +30,7 @@ Gleaner has a _setup_ call that is used to init the object store for runs.
 
 #### Example
 
-An implemenation of Minio exist for this stage of the work at:
+An implementation of Minio exist for this stage of the work at:
 
 https://oss.geoconnex.us
 
@@ -53,7 +53,7 @@ in other methods any RDF based triple store could be used.
 
 #### Example
 
-An implemenation of GraphDB exist for this stage of the work at:
+An implementation of GraphDB exist for this stage of the work at:
 
 https://graph.geoconnex.us  
 
@@ -64,10 +64,10 @@ graphs, it is easy to modify the ELT style workflow.
 
 As a bit of a digression at this point, the phrase ELT (Extract Load Translate) is used here over
 the more common ETL (Extract Translate Load).   Mostly this is due to the fact that the JSON-LD
-based objects can typically be loaded directly into many systms as obtained directly from the source.
+based objects can typically be loaded directly into many systems as obtained directly from the source.
 Little effort is any is needed to feed them into other data indexes.
 
-By exmaple, tools like MongoDB, ElasticSearch, Solr/Lucne, or cloud tools like AWS Athena, 
+By exmaple, tools like MongoDB, ElasticSearch, Solr/Lucene, or cloud tools like AWS Athena, 
 Google Big Query can work with JSON formats, often with little or no schema alterations on load.  
 
 Notable exceptions to this would be the loading of the files into a spatial system other than 
@@ -79,7 +79,7 @@ reference, likely the data graph URI.
 
 #### Example
 
-An implemenation of [https://www.meilisearch.com/](meilisearch) exist for this stage of the work at:
+An implementation of [https://www.meilisearch.com/](meilisearch) exist for this stage of the work at:
 
 https://index.geoconnex.us  
 
@@ -88,7 +88,7 @@ very easy to process JSON-LD documents directly into Meilisearch to explore text
 
 ### Reference interfaces
 
-The architecture is desgined to support multiple approaches to interacting with the data.  
+The architecture is designed to support multiple approaches to interacting with the data.  
 Examples of this include:
 
 * one
