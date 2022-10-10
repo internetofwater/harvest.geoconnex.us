@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Object store keys
-export MINIO_ACCESS_KEY= 
-export MINIO_SECRET_KEY= 
+# Object store keys, likely will leave blank and use via env variables
+export MINIO_ACCESS_KEY=YOURACCESSKEY 
+export MINIO_SECRET_KEY=YOURSECRETKEY
 
 # local data volumes
 export GLEANER_BASE=/mnt/path/to/data
