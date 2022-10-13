@@ -57,6 +57,10 @@ for line in Lines:
 # json_data = json.dumps(sources)
 # print(json_data)
 
-with open('sources.yml', 'w') as outfile:
-        yaml.dump(sources, outfile, default_flow_style=False)
+# read the PREFIX file# Reading data from file1
+with open('gleanerconfigPREFIX.yaml') as fp:
+    data = fp.read()
 
+with open('gleanerconfig.yaml', 'w') as outfile:
+    outfile.write(data)
+    yaml.dump(sources, outfile, default_flow_style=False)
