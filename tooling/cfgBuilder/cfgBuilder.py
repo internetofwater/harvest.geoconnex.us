@@ -1,12 +1,35 @@
 import json
 import yaml
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
+import requests
+import argparse
 
+# Notes
 # https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
 
-# Using readlines()
-f = open('xmlloc.txt', 'r')
-Lines = f.readlines()
+# Initialize args  parser
+parser = argparse.ArgumentParser()
+parser.add_argument("-s", "--SiteIndex", help = "URL to sitemap index")
+args = parser.parse_args()
+
+# Deprecated: Using readlines() on a file
+# f = open('xmlloc.txt', 'r')
+# Lines = f.readlines()
+
+# parse the sitemap INDEX for the referenced sitemaps for a config file
+Lines = []
+xmlDict = {}
+
+r = requests.get(args.SiteIndex)
+xml = r.text
+soup = BeautifulSoup(xml, features='xml')
+sitemapTags = soup.find_all("sitemap")
+
+for sitemap in sitemapTags:
+    # print(sitemap.findNext("loc").text)
+    Lines.append(sitemap.findNext("loc").text)
+
 
 sources = []
 count = 0

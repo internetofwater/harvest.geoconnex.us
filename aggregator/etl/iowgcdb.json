@@ -1,6 +1,6 @@
 {
   "sparql": {
-     "endpoint": "https://example.org/repositories/gcdb/sparql"
+     "endpoint": "https://example.org/repositories/iow/sparql"
    },
   "objects": {
       "prefix": ["summoned/demo0",  "summoned/mainstems0", "summoned/gages0"  , "summoned/gages1", "summoned/gages2", "summoned/gages3"     ],
