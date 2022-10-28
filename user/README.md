@@ -24,5 +24,43 @@ and the interface can be replaced or suplimented with other tooling.
 
 For example,, more vertical interfaces into the graph and object store could take place easily based on open source packages such as [Streamlit](https://streamlit.io/) or [Dash](https://dash.plotly.com/).  These approaches would leverage work done in the noetbook section as well.  
 
+## GraphDB Notes
+
+The approach used in this test UI leverages the Lucene indexing in GraphDB.  Settings for this follow.
+
+```
+{
+    "boostProperties": [],
+    "types": ["https://www.opengis.net/def/schema/hy_features/hyf/HY_HydroLocation", "https://www.opengis.net/def/schema/hy_features/hyf/HY_HydrometricFeature"],
+    "importGraph": false,
+    "stripMarkup": false,
+    "languages": [],
+    "readonly": false,
+    "detectFields": false,
+    "fields": [{
+        "propertyChain": ["https://schema.org/description"],
+        "fieldName": "description",
+        "indexed": true,
+        "stored": true,
+        "multivalued": true,
+        "analyzed": true,
+        "ignoreInvalidValues": false,
+        "facet": true
+        },
+        {
+            "propertyChain": ["https://schema.org/name"],
+            "fieldName": "name",
+            "indexed": true,
+            "stored": true,
+            "multivalued": true,
+            "analyzed": true,
+            "ignoreInvalidValues": false,
+            "facet": true
+    }],
+    "skipInitialIndexing": false
+}
+```
+
+
 
 

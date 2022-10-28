@@ -152,13 +152,13 @@ function graphcall(q, n, o) {
   //document.getElementById('progress').style.visibility = "visible";
 
   (async () => {
-       var url = new URL("https://graph.geoconnex.us/repositories/iowdev"),
+       var url = new URL("https://graph.geoconnex.us/repositories/iow"),
 
 
         params = {
         query: `PREFIX luc: <http://www.ontotext.com/connectors/lucene#>
         PREFIX luc-index: <http://www.ontotext.com/connectors/lucene/instance#>
-        PREFIX schema: <http://schema.org/>
+        PREFIX schema: <https://schema.org/>
         
         SELECT ?s ?score ?name ?desc ?label {
           ?search a luc-index:combined_one ;
