@@ -154,25 +154,29 @@ function graphcall(q, n, o) {
   (async () => {
        var url = new URL("https://graph.geoconnex.us/repositories/iow"),
 
-
         params = {
-        query: `PREFIX luc: <http://www.ontotext.com/connectors/lucene#>
-        PREFIX luc-index: <http://www.ontotext.com/connectors/lucene/instance#>
-        PREFIX schema: <https://schema.org/>
-        
-        SELECT ?s ?score ?name ?desc ?label {
-          ?search a luc-index:combined_two ;
-              luc:query "${ressparql}" ;
-              luc:entities ?s .
-              ?s luc:score ?score .
-            
-            OPTIONAL { ?s schema:name ?name . }
-            OPTIONAL { ?s schema:description ?desc . }
-            OPTIONAL { ?s <http://www.w3.org/2000/01/rdf-schema#label> ?label .}
-        }
-        LIMIT 100
-      ` };
+           query: `PREFIX hyf: <https://www.opengis.net/def/schema/hy_features/hyf/>
+           PREFIX schema: <https://schema.org/>
+           PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 
+           select DISTINCT ?mainstem ?gage ?gsourl ?gname ?name ?gwkt ?mswkt where {
+           <${ressparql}> hyf:referencedPosition ?rp .
+           ?rp hyf:HY_IndirectPosition ?ip .
+           ?ip hyf:linearElement ?mainstem .
+           BIND (?mainstem as ?target)
+           ?gage hyf:referencedPosition ?rp2 .
+           ?rp2 hyf:HY_IndirectPosition ?ip2.
+           ?ip2 hyf:linearElement ?target .
+           ?gage schema:name ?gname .
+           ?gage schema:subjectOf ?gso .
+           ?gso schema:url ?gsourl .
+           ?mainstem schema:name ?name .
+           ?mainstem geo:hasGeometry ?msgeom .
+           ?msgeom geo:asWKT ?mswkt .
+           ?gage geo:hasGeometry ?ggeom .
+           ?ggeom geo:asWKT ?gwkt
+           }
+      ` };
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     console.log(params.query);
@@ -218,14 +222,29 @@ const showresults = (content) => {
     // console.log("--- in  NEW data files loop ---")
     // itemTemplates.push(html`<div class="row" style="margin-top:30px"> <div class="col-12"> <pre> <code>`);
 
-    var s;
-    if (getSafe(() => barval[i].s.value)) {
-      s = barval[i].s.value;
+      var s;
+      if (getSafe(() => barval[i].s.value)) {
+          s = barval[i].s.value;
+      }
+
+    var gage;
+    if (getSafe(() => barval[i].gage.value)) {
+      gage = barval[i].gage.value;
     }
 
-    var so;
-    if (getSafe(() => barval[i].label.value)) {
-      so = barval[i].label.value;
+      var gname;
+    if (getSafe(() => barval[i].gname.value)) {
+        gname = barval[i].gname.value;
+    }
+
+      var gsourl;
+    if (getSafe(() => barval[i].gsourl.value)) {
+        gsourl = barval[i].gsourl.value;
+    }
+
+    var mainstem;
+    if (getSafe(() => barval[i].mainstem.value)) {
+        mainstem = barval[i].mainstem.value;
     }
 
     var name = "";
@@ -235,27 +254,15 @@ const showresults = (content) => {
       nameshort = truncate.apply(barval[i].name.value, [90, true]);
     }
 
-    var desc;
-    if (getSafe(() => barval[i].desc.value)) {
-      desc = truncate.apply(barval[i].desc.value, [900, true]);
-    }
-
-      //        <h5 style="margin-bottom:0;margin-top:0"> Resource: <a target="_blank" href="${s}" > ${so} </a></h5>
-      // <small>  <ins> <a class="secondary" target="_blank" href="${s}">  ${name}</a> </ins> </small>
-
 
     itemTemplates.push(html`
-                            <blockquote>
-    <h5 style="margin-bottom:0;margin-top:0"><a target="_blank" href="${s}" > ${name} </a></h5>
-
-    ${desc}
-                            <footer>
-                            <cite> - <ins> <a class="secondary" target="_blank" href="pathtest.html?search=${s}"> monitoring locations on the same reference mainstem</a> </ins>
-                              </cite>
-                            </footer>
-                            </blockquote>
-`);
-
+    <p style="margin-bottom:0px;">
+        <h5 style="margin-bottom:0px;margin-top:0">  <a target="_blank" href="${gsourl}" > ${gname} </a></h5>
+        <small>  <ins> <a class="secondary" target="_blank" href="${gage}">  Gage</a> </ins> </small> /
+       <small>  <ins> <a class="secondary" target="_blank" href="${mainstem}">  Mainstem</a> </ins> </small>
+    
+    </p>
+    `);
 
   }
 
