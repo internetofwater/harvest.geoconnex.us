@@ -4,9 +4,14 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 import requests
 import argparse
+import re
 
 # Notes
 # https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+
+
+def remove_non_alphanumeric(string):
+    return re.sub(r'[^a-zA-Z0-9]+', '', string)
 
 # Initialize args  parser
 parser = argparse.ArgumentParser()
@@ -46,8 +51,7 @@ for line in Lines:
     # keystr = str("Line{}".format(count))
 
     target = line.rsplit('/', 1)[-1]
-
-    name = target.lower().replace(".xml", "").replace("_", "")
+    name =  remove_non_alphanumeric(target.lower().replace(".xml", ""))
 
     data["sourcetype"] = "sitemap"
 
