@@ -15,4 +15,12 @@ brittle approach though given the potential changes in the sitemap
 URL.  So, you may need to alter those elements of the code to
 address your particular needs.
 
-[cfgBuilder](./README.md)
+## Usage
+
+```
+python cfgBuilder.py -s https://geoconnex.us/sitemap.xml
+```
+
+Thsi will generate the file ```gleanerconfig.yaml``` That is used both by Gleaner but
+also by the code generator script in the dagster section of this repository.
+

@@ -38,18 +38,29 @@ for line in Lines:
     data = {}
     count += 1
     # set up a name based on the URL structure (DANGER:  this code is fragile)
-    o = urlparse(line)
-    ps = o.path
-    x = ps.split("/")
-    name = x[2].lower().replace("-", "")
+    # o = urlparse(line)
+    # ps = o.path
+    # x = ps.split("/")
+    # name = x[2].lower().replace("-", "")
     # print("Line{}: {}".format(count, line.strip()))
     # keystr = str("Line{}".format(count))
+
+    target = line.rsplit('/', 1)[-1]
+
+    name = target.lower().replace(".xml", "").replace("_", "")
+
     data["sourcetype"] = "sitemap"
-    data["name"] = str("{}{}".format(name, count))
+
+    # data["name"] = str("{}{}".format(name, count))
+    data["name"] = str("{}".format(name))
+
     data["url"] = line.strip()
     data["headless"] = "false"
     data["pid"] = "https://gleaner.io/genid/geoconnex"
-    data["propername"] = str("{}{}".format(name, count))
+
+    # data["propername"] = str("{}{}".format(name, count))
+    data["propername"] = str("{}".format(name))
+
     data["domain"] = "https://geoconnex.us"
     data["active"] = "true"
     sources.append(data)
