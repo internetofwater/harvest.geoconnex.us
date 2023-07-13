@@ -2,6 +2,9 @@
 
 # harvest geoconnex.us
 
+### Running notes
+https://docs.google.com/document/d/1IyCmuVbwv8oiyAf9zas2uZVl_sQ7pCQugcQjdIXVksk/edit
+
 ## About
 
 
