@@ -21,6 +21,6 @@ address your particular needs.
 python cfgBuilder.py -s https://geoconnex.us/sitemap.xml
 ```
 
-Thsi will generate the file ```gleanerconfig.yaml``` That is used both by Gleaner but
+This will generate the file ```gleanerconfig.yaml``` That is used both by Gleaner but
 also by the code generator script in the dagster section of this repository.
 
