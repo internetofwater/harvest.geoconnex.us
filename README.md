@@ -30,4 +30,5 @@ In the Aggregator is a person or organization who is indexing resources on the w
 The user is the individual or community who wished to leverage the indexes generated as a result of the publishing and aggregation activities. The user may be using the developed knowledge graph or some web interface built on top of the knowledge graph or other index. They may also use query languages like SPARQL or other APIs or even directly work with the underlying data warehouse of collected data graphs.
 
 
+## Developer Onboarding
 
