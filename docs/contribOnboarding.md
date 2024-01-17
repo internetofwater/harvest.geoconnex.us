@@ -52,16 +52,30 @@ The Contributor should be become proficient with the following programming langu
 
 ## Software Frameworks
 
-* ### Data Orchestration...
-    - #### [Dagster](https://docs.dagster.io/getting-started?utm_source=google&utm_medium=cpc&utm_campaign=18132832715&utm_content=138233353817&utm_term=dag%20orchestration&gclid=CjwKCAiA75itBhA6EiwAkho9e3IGy6NQIF6hHnGOXWb7WUllguRcvHw7rT919J_DgTgcA8vpmkJnQBoCu9QQAvD_BwE)
+* ### *Data Orchestration...*
+    - #### [Dagster](https://docs.dagster.io/getting-started?)
+        - *Used By...*
+            - [Scheduler](#scheduler)
+
 
 
 ## System Components 
 
 ### Geoconnex Components
-* #### [Scheduler](https://github.com/gleanerio/scheduler)
+* #### [Scheduler](https://github.com/gleanerio/scheduler) 
     - *Depends On...* 
-        - #### [Dagster](https://docs.dagster.io/getting-started?utm_source=google&utm_medium=cpc&utm_campaign=18132832715&utm_content=138233353817&utm_term=dag%20orchestration&gclid=CjwKCAiA75itBhA6EiwAkho9e3IGy6NQIF6hHnGOXWb7WUllguRcvHw7rT919J_DgTgcA8vpmkJnQBoCu9QQAvD_BwE)
+        - #### [Dagster](https://docs.dagster.io/getting-started)
+            - *Key Concepts Used...*
+                - Assets
+                - Asset Groups
+                - Jobs
+                - Schedules
+                - Runs
+                - Deployments
+            - *Commands Used*
+                - `dagster-webserver`
+                - `dagster-daemon`
+                - `dagster api grpc`
         - #### [Gleaner](https://github.com/gleanerio/gleaner)
         - #### [Nabu](https://github.com/gleanerio/nabu) 
 
