@@ -23,8 +23,9 @@ Used to create documentation for all identified [Personas](README.md#personas)
 
 ## Data Models
 
-## RDF
-A working knowledge of RDF concepts, especially in the JSON-LD serialization format, is essential to understanding the System.
+## RDF/JSON-LD
+A working knowledge of RDF concepts, especially in the JSON-LD serialization format, is essential to understanding the System. The System's common vocabulary defined in RDF/JSON-LD is essential to the interactions between [Publishers](README.md#persona-publisher) model their data for consumption by [Aggegrators](README.md#persona-aggregator) and advanced [Users](README.md#persona-user) that leverage the System's [Graph Database](#graph-database) directly. 
+
 
 * [RDF Primer](https://www.w3.org/TR/rdf11-primer/)
 * [RDF Concepts & Abstract Syntax](https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/)
@@ -33,6 +34,8 @@ A working knowledge of RDF concepts, especially in the JSON-LD serialization for
 * [RDF Datasets](https://www.w3.org/TR/2014/NOTE-rdf11-datasets-20140225/)
 * [OWL2 Web Ontology Language](https://www.w3.org/TR/owl2-overview/)
 * [JSON-LD](https://json-ld.org/)
+
+RDF/JSON-LD knowledge is essential to understanding how [Publishers](README.md#persona-publisher) model their data for consumption by [Aggegrators](README.md#persona-aggregator) and advanced [Users](README.md#persona-user) that leverage the System's [Graph Database](#graph-database) directly. 
 
 
 ## File Formats
@@ -92,7 +95,7 @@ Relevant Dagster runtime components used by Scheduler are as follows:
 Other Geoconnex components orchestrated by Scheduler via Dagster are Gleaner and Nabu. 
 
 #### [Gleaner](https://github.com/gleanerio/gleaner)
-Gleaner Extracts JSON-LD from web pages.
+Gleaner Extracts JSON-LD from web pages. To create a local Gleaner development environment, please visit [Gleaner Quickstart](gleaner.md).
 #### [Nabu](https://github.com/gleanerio/nabu) 
 Nabu loads data graphs into triple-stores.
 
