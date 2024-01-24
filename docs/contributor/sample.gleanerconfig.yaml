@@ -22,7 +22,7 @@ millers:
   graph: true
 minio:
   address: localhost
-  port: 9001
+  port: 9000
   ssl: false
   accessKey: amazingaccesskey
   secretKey: amazingsecretkey

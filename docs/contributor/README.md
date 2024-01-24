@@ -97,7 +97,8 @@ Other Geoconnex components orchestrated by Scheduler via Dagster are Gleaner and
 #### [Gleaner](https://github.com/gleanerio/gleaner)
 Gleaner Extracts JSON-LD from web pages. To create a local Gleaner development environment, please visit [Gleaner Quickstart](gleaner.md).
 #### [Nabu](https://github.com/gleanerio/nabu) 
-Nabu loads data graphs into triple-stores.
+Nabu loads data graphs into triple-stores. To create a local Nabu development environment, please visit [Nabu Quickstart](nabu.md).
+
 
 ### Dependent (Cloud) Services 
 
