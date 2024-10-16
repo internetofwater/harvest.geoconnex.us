@@ -1,0 +1,9 @@
+project          = 
+region           = 
+admin_email      =
+zone             =
+s3_bucket        =
+url              =
+credentials      =
+vm_name          =
+sitemap_url      =
