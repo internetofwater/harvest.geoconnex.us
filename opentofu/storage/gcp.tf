@@ -1,0 +1,17 @@
+resource "google_storage_bucket" "harvest_bucket" {
+  name          = var.s3_bucket
+  location      = var.region
+  force_destroy = true
+
+}
+
+resource "google_storage_bucket_iam_member" "bucket_access" {
+  bucket = google_storage_bucket.harvest_bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${var.service_account_email}"
+}
+
+resource "google_storage_hmac_key" "hmac_key" {
+  service_account_email = var.service_account_email
+  project               = var.project
+}
