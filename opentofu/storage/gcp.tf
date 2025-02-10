@@ -3,6 +3,28 @@ resource "google_storage_bucket" "harvest_bucket" {
   location      = var.region
   force_destroy = true
 
+  versioning {
+    enabled = false
+  }
+
+  lifecycle_rule {
+    action {
+      type = "SetStorageClass"
+      storage_class = "COLDLINE"
+    }
+    condition {
+      age = 7  # Move to Coldline after 7 days
+    }
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      age = 30
+    }
+  }
 }
 
 resource "google_storage_bucket_iam_member" "bucket_access" {
