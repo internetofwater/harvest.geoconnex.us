@@ -19,12 +19,18 @@ module "storage" {
 
 module "instances" {
   source        = "./instances"
-  admin_email   = var.admin_email
   project       = var.project
   url           = var.url
+  graph_url     = var.graph_url
   name          = var.vm_name
   zone          = var.zone
   sitemap_url   = var.sitemap_url
+
+  # notifications
+  lakefs_endpoint = var.lakefs_endpoint
+  lakefs_access_key = var.lakefs_access_key
+  lakefs_secret_key = var.lakefs_secret_key
+  dagster_slack_token = var.dagster_slack_token
 
   # network configurations
   network_name  = module.network.network_name

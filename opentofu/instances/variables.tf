@@ -18,7 +18,7 @@ variable "disk_size" {
 variable "machine_type" {
   description = "Machine type for GCP instances (overrides instance_type in production)"
   type        = string
-  default     = "n1-highcpu-8"
+  default     = "e2-highcpu-32"
 }
 
 variable "zone" {
@@ -76,10 +76,20 @@ variable "url" {
   type        = string
 }
 
+variable "graph_url" {
+  description = "Graph URL"
+  type        = string
+}
+
 variable "scheduler_version" {
   description = "The version of the internetofwater/scheduler to deploy."
   type        = string
   default     = "main"
+}
+
+variable "dagster_slack_token" {
+  description = "Dagster slack token"
+  type        = string
 }
 
 variable "name" {
@@ -102,4 +112,19 @@ variable "prov_graph" {
   description = "name of the prov graph repository"
   type        = string
   default     = "iowprov"
+}
+
+variable "lakefs_endpoint" {
+  description = "URL of lakefs endpoint"
+  type        = string
+}
+
+variable "lakefs_access_key" {
+  description = "Lakefs Access Key"
+  type        = string
+}
+
+variable "lakefs_secret_key" {
+  description = "Lakefs Secret Key"
+  type        = string
 }

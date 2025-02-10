@@ -35,6 +35,12 @@ variable "s3_bucket" {
 variable "url" {
   description = "URL Host"
   type        = string
+  default     = "test.harvest.internetofwater.app"
+}
+
+variable "graph_url" {
+  description = "Graph URL"
+  type        = string
   default     = "test.harvest.graph.internetofwater.app"
 }
 
@@ -49,5 +55,25 @@ variable "vm_name" {
 
 variable "sitemap_url" {
   description = "URL of the sitemap index file"
+  type        = string
+}
+
+variable "lakefs_endpoint" {
+  description = "URL of lakefs endpoint"
+  type        = string
+}
+
+variable "lakefs_access_key" {
+  description = "Lakefs Access Key"
+  type        = string
+}
+
+variable "lakefs_secret_key" {
+  description = "Lakefs Secret Key"
+  type        = string
+}
+
+variable "dagster_slack_token" {
+  description = "Dagster slack token"
   type        = string
 }

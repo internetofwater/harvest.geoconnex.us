@@ -3,6 +3,8 @@ resource "google_compute_instance" "harvest_vm" {
   machine_type = var.machine_type
   zone         = var.zone
 
+  tags = [ "https-server" ]
+
   boot_disk {
     initialize_params {
       image = "debian-cloud/${var.instance_os}"
@@ -16,7 +18,6 @@ resource "google_compute_instance" "harvest_vm" {
       nat_ip = var.static_ip
     }
   }
-
 
   metadata_startup_script = <<-EOF
     #!/bin/bash
@@ -33,13 +34,15 @@ resource "google_compute_instance" "harvest_vm" {
     # Step 3: Set up Scheduler Environment
     cd /opt/scheduler
     cat <<ENV | sudo tee /opt/scheduler/.env > /dev/null
-    # Configs
-    REMOTE_GLEANER_SITEMAP=${var.sitemap_url}
     GLEANER_HEADLESS_ENDPOINT=http://headless:9222
-    GLEANERIO_HEADLESS_NETWORK=headless_gleanerio
+    # remote sitemap tells us which sources we use to create the gleaner config
+    REMOTE_GLEANER_SITEMAP=${var.sitemap_url}
+    GLEANER_THREADS=5
+
     # Docker
-    GLEANERIO_GLEANER_IMAGE=internetofwater/gleaner:latest
-    GLEANERIO_NABU_IMAGE=internetofwater/nabu:latest
+    GLEANER_IMAGE=internetofwater/gleaner:latest
+    NABU_IMAGE=internetofwater/nabu:latest
+
     # Minio
     GLEANERIO_MINIO_ADDRESS=storage.googleapis.com
     GLEANERIO_MINIO_PORT=443
@@ -48,11 +51,13 @@ resource "google_compute_instance" "harvest_vm" {
     GLEANERIO_MINIO_REGION=${var.s3_region}
     MINIO_ACCESS_KEY=${var.s3_access_key}
     MINIO_SECRET_KEY=${var.s3_secret_key}
+
     # GraphDB
     GLEANERIO_GRAPH_URL=http://graphdb:7200
     GLEANERIO_GRAPH_NAMESPACE=${var.data_graph}
     GLEANERIO_DATAGRAPH_ENDPOINT=${var.data_graph}
     GLEANERIO_PROVGRAPH_ENDPOINT=${var.prov_graph}
+
     # Dagster
     DAGSTER_POSTGRES_USER=postgres
     DAGSTER_POSTGRES_PASSWORD=postgres_password
@@ -61,17 +66,17 @@ resource "google_compute_instance" "harvest_vm" {
     POSTGRES_USER=postgres
     POSTGRES_PASSWORD=postgres_password
     POSTGRES_DB=postgres_db
+
     # Integrations / Notifications
-    DAGSTER_SLACK_TOKEN=xoxe.xoxp-1-Mi0yLTMwMDkzMzg0NTg0MzUtMzAxNjAzMTI3NDM4OS03Nzg5ODI3MjI5NzMxLTc3NzUzNjk1MzI4MDctNWU5ZTQ3NzdjOTYxNjI5OTEzOTJmZWEwYjJmZTMwNDE0M2M4MzhiNzdiZjE4MDU2N2VmOTJiNzc1NmNjMDYyNQ
+    DAGSTER_SLACK_TOKEN=${var.dagster_slack_token}
+    LAKEFS_ENDPOINT_URL=${var.lakefs_endpoint}
+    LAKEFS_ACCESS_KEY_ID=${var.lakefs_access_key}
+    LAKEFS_SECRET_ACCESS_KEY=${var.lakefs_secret_key}
     ENV
 
     # Step 4: Run Scheduler
     nohup python3 main.py prod &
-    echo "Scheduler Started!" >> /var/log/startup.log
-
-    # Step 5: Start GraphDB
-    sudo docker run -d --name graphdb --network dagster_network -v /opt/graphdb/data:/opt/graphdb/data -e JAVA_XMX=4g -e JAVA_XMS=2048m -p 7200:7200 khaller/graphdb-free:latest
-    echo "GraphDB Started!" >> /var/log/startup.log
+    echo "Scheduler Started!"
 
     # Step 6: Install Caddy
     curl -O https://raw.githubusercontent.com/cgs-earth/script-cache/refs/heads/master/install_caddy.sh
@@ -81,6 +86,10 @@ resource "google_compute_instance" "harvest_vm" {
     cat <<CADDYFILE | sudo tee /etc/caddy/Caddyfile > /dev/null
     ${var.url} {
             reverse_proxy :3000
+    }
+
+    ${var.graph_url} {
+            reverse_proxy :7200
     }
     CADDYFILE
     systemctl restart caddy
