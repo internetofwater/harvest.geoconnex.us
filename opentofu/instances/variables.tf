@@ -4,14 +4,20 @@
 variable "instance_os" {
   description = "Operating system for VM instances"
   type        = string
-  default     = "debian-11" 
+  default     = "debian-12" 
 }
 
 # Disk Configuration
 variable "disk_size" {
   description = "Boot disk size for each VM instance (in GB)"
   type        = number
-  default     = 50
+  default     = 100
+}
+
+variable "enable_public_url" {
+  description = "Boolean if running Caddy for HTTPS"
+  type        = bool
+  default     = false
 }
 
 # GCP-Specific Configurations
@@ -99,6 +105,17 @@ variable "name" {
 
 variable "sitemap_url" {
   description = "URL of the sitemap index file"
+  type        = string
+}
+
+variable "headless_url" {
+  description = "URL of the headless service"
+  type        = string
+  default     = "http://scheduler_headless:9222"
+}
+
+variable "service_account_email" {
+  description = "Email of the service user to access to the storage bucket"
   type        = string
 }
 

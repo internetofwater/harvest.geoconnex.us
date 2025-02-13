@@ -1,7 +1,13 @@
 resource "google_storage_bucket" "harvest_bucket" {
   name          = var.s3_bucket
   location      = var.region
-  force_destroy = true
+  
+  storage_class = "STANDARD"
+  uniform_bucket_level_access = true
+
+  hierarchical_namespace {
+    enabled = true
+  }
 
   versioning {
     enabled = false

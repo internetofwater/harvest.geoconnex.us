@@ -1,7 +1,23 @@
 provider "google" {
   project     = var.project
-  region      = var.region
+  region      = "us"
   credentials = file(var.credentials) 
+}
+
+resource "google_project_service" "required_apis" {
+  for_each = toset([
+    "compute.googleapis.com",
+    "run.googleapis.com",
+    "iam.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "storage.googleapis.com",
+    "servicenetworking.googleapis.com"
+  ])
+
+  project = var.project
+  service = each.key
+
+  disable_on_destroy = false
 }
 
 module "network" {
@@ -25,6 +41,7 @@ module "instances" {
   name          = var.vm_name
   zone          = var.zone
   sitemap_url   = var.sitemap_url
+  service_account_email = var.service_account_email
 
   # notifications
   lakefs_endpoint = var.lakefs_endpoint

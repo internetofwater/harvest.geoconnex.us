@@ -2,7 +2,9 @@ resource "google_compute_instance" "harvest_vm" {
   name         = var.name
   machine_type = var.machine_type
   zone         = var.zone
-
+  metadata     = {
+    enable-osconfig = "TRUE"
+  }
   tags = [ "https-server" ]
 
   boot_disk {
@@ -19,12 +21,17 @@ resource "google_compute_instance" "harvest_vm" {
     }
   }
 
+  service_account {
+    email  = var.service_account_email
+    scopes = ["cloud-platform"]
+  }
+
   metadata_startup_script = <<-EOF
     #!/bin/bash
     echo "Startup script initiated" > /var/log/startup.log
 
     # Step 1: Install Docker
-    curl -O https://raw.githubusercontent.com/cgs-earth/script-cache/refs/heads/master/install_docker.sh
+    curl -O https://cgs-earth.github.io/script-cache/install_docker.sh
     bash install_docker.sh
 
     # Step 2: Install Scheduler
@@ -34,7 +41,7 @@ resource "google_compute_instance" "harvest_vm" {
     # Step 3: Set up Scheduler Environment
     cd /opt/scheduler
     cat <<ENV | sudo tee /opt/scheduler/.env > /dev/null
-    GLEANER_HEADLESS_ENDPOINT=http://headless:9222
+    GLEANER_HEADLESS_ENDPOINT=${var.headless_url}
     # remote sitemap tells us which sources we use to create the gleaner config
     REMOTE_GLEANER_SITEMAP=${var.sitemap_url}
     GLEANER_THREADS=5
@@ -75,24 +82,27 @@ resource "google_compute_instance" "harvest_vm" {
     ENV
 
     # Step 4: Run Scheduler
-    nohup python3 main.py prod &
+    python3 main.py pull --profiles production
+    nohup python3 main.py prod --build &
     echo "Scheduler Started!"
 
-    # Step 6: Install Caddy
-    curl -O https://raw.githubusercontent.com/cgs-earth/script-cache/refs/heads/master/install_caddy.sh
-    bash install_caddy.sh
+    if [ ${var.enable_public_url} != "false" ]; then
+      # Step 5: Install Caddy
+      curl -O https://cgs-earth.github.io/script-cache/install_caddy.sh
+      bash install_caddy.sh
 
-    # Step 7: Run Caddy
-    cat <<CADDYFILE | sudo tee /etc/caddy/Caddyfile > /dev/null
-    ${var.url} {
-            reverse_proxy :3000
-    }
+      # Step 6: Run Caddy
+      cat <<CADDYFILE | sudo tee /etc/caddy/Caddyfile > /dev/null
+      ${var.url} {
+              reverse_proxy :3000
+      }
 
-    ${var.graph_url} {
-            reverse_proxy :7200
-    }
-    CADDYFILE
-    systemctl restart caddy
+      ${var.graph_url} {
+              reverse_proxy :7200
+      }
+      CADDYFILE
+      systemctl restart caddy
+    fi
 
   EOF
 }
