@@ -31,8 +31,7 @@ resource "google_compute_instance" "harvest_vm" {
     echo "Startup script initiated" > /var/log/startup.log
 
     # Step 1: Install Docker
-    curl -O https://cgs-earth.github.io/script-cache/install_docker.sh
-    bash install_docker.sh
+    curl -sSL https://cgs-earth.github.io/script-cache/install_docker.sh | bash
 
     # Step 2: Install Scheduler
     apt install -y git
@@ -46,10 +45,6 @@ resource "google_compute_instance" "harvest_vm" {
     REMOTE_GLEANER_SITEMAP=${var.sitemap_url}
     GLEANER_THREADS=5
 
-    # Docker
-    GLEANER_IMAGE=internetofwater/gleaner:latest
-    NABU_IMAGE=internetofwater/nabu:latest
-
     # Minio
     GLEANERIO_MINIO_ADDRESS=storage.googleapis.com
     GLEANERIO_MINIO_PORT=443
@@ -60,7 +55,7 @@ resource "google_compute_instance" "harvest_vm" {
     MINIO_SECRET_KEY=${var.s3_secret_key}
 
     # GraphDB
-    GLEANERIO_GRAPH_URL=http://graphdb:7200
+    GLEANERIO_GRAPH_URL=${var.graph_url}
     GLEANERIO_GRAPH_NAMESPACE=${var.data_graph}
     GLEANERIO_DATAGRAPH_ENDPOINT=${var.data_graph}
     GLEANERIO_PROVGRAPH_ENDPOINT=${var.prov_graph}
@@ -88,17 +83,12 @@ resource "google_compute_instance" "harvest_vm" {
 
     if [ ${var.enable_public_url} != "false" ]; then
       # Step 5: Install Caddy
-      curl -O https://cgs-earth.github.io/script-cache/install_caddy.sh
-      bash install_caddy.sh
+      curl -sSL https://cgs-earth.github.io/script-cache/install_caddy.sh | bash
 
       # Step 6: Run Caddy
       cat <<CADDYFILE | sudo tee /etc/caddy/Caddyfile > /dev/null
       ${var.url} {
               reverse_proxy :3000
-      }
-
-      ${var.graph_url} {
-              reverse_proxy :7200
       }
       CADDYFILE
       systemctl restart caddy

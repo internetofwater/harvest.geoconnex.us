@@ -11,7 +11,7 @@ variable "instance_os" {
 variable "disk_size" {
   description = "Boot disk size for each VM instance (in GB)"
   type        = number
-  default     = 100
+  default     = 24
 }
 
 variable "enable_public_url" {
@@ -24,7 +24,7 @@ variable "enable_public_url" {
 variable "machine_type" {
   description = "Machine type for GCP instances (overrides instance_type in production)"
   type        = string
-  default     = "e2-highcpu-32"
+  default     = "e2-highcpu-16"
 }
 
 variable "zone" {
@@ -85,6 +85,7 @@ variable "url" {
 variable "graph_url" {
   description = "Graph URL"
   type        = string
+  default     = "http://graphdb:7200"
 }
 
 variable "scheduler_version" {

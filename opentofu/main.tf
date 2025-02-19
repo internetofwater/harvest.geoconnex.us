@@ -11,7 +11,8 @@ resource "google_project_service" "required_apis" {
     "iam.googleapis.com",
     "cloudbuild.googleapis.com",
     "storage.googleapis.com",
-    "servicenetworking.googleapis.com"
+    "servicenetworking.googleapis.com",
+    "cloudresourcemanager.googleapis.com"
   ])
 
   project = var.project
@@ -33,15 +34,30 @@ module "storage" {
   s3_bucket  = var.s3_bucket
 }
 
+module "graphdb" {
+  source            = "github.com/Ontotext-AD/terraform-gcp-graphdb?ref=v0.2.3"
+  source_image      = "projects/mpi-graphdb-public/global/images/ontotext-graphdb-10-7-3-202409031355"
+  project_id        = var.project
+  zone              = var.zone
+  boot_disk_size    = 200
+  network_interface = module.network.network_name
+}
+
+data "google_compute_instance" "graphdb" {
+  name    = "graphdb" 
+  project = var.project
+  zone    = var.zone
+}
+
 module "instances" {
   source        = "./instances"
   project       = var.project
   url           = var.url
-  graph_url     = var.graph_url
   name          = var.vm_name
   zone          = var.zone
   sitemap_url   = var.sitemap_url
   service_account_email = var.service_account_email
+  graph_url     = "http://${data.google_compute_instance.graphdb.network_interface[0].network_ip}:7200"
 
   # notifications
   lakefs_endpoint = var.lakefs_endpoint

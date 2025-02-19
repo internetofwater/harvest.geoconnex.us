@@ -5,10 +5,6 @@ resource "google_storage_bucket" "harvest_bucket" {
   storage_class = "STANDARD"
   uniform_bucket_level_access = true
 
-  hierarchical_namespace {
-    enabled = true
-  }
-
   versioning {
     enabled = false
   }
