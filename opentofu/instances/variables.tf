@@ -140,9 +140,38 @@ variable "lakefs_endpoint" {
 variable "lakefs_access_key" {
   description = "Lakefs Access Key"
   type        = string
+  sensitive   = true
 }
 
 variable "lakefs_secret_key" {
   description = "Lakefs Secret Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "zenodo_access_token" {
+  description = "Zenodo Access Token"
+  type        = string
+  sensitive   = true
+}
+
+variable "database_host" {
+  description = "Database Hostname"
+  type        = string
+}
+
+variable "database_user" {
+  description = "Database Username"
+  type        = string
+}
+
+variable "database_password" {
+  description = "Database Password"
+  type        = string
+  sensitive   = true
+}
+
+variable "database_name" {
+  description = "Database Name"
   type        = string
 }

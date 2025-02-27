@@ -26,6 +26,13 @@ module "network" {
   project = var.project
 }
 
+module "database" {
+  source = "./database"
+  region  = var.region
+  network = module.network.id
+  database_password = var.database_password
+}
+
 module "storage" {
   source = "./storage"
   service_account_email = var.service_account_email
@@ -39,7 +46,7 @@ module "graphdb" {
   source_image      = "projects/mpi-graphdb-public/global/images/ontotext-graphdb-10-7-3-202409031355"
   project_id        = var.project
   zone              = var.zone
-  boot_disk_size    = 200
+  boot_disk_size    = 250
   network_interface = module.network.network_name
 }
 
@@ -47,6 +54,8 @@ data "google_compute_instance" "graphdb" {
   name    = "graphdb" 
   project = var.project
   zone    = var.zone
+
+  depends_on = [ module.graphdb ]
 }
 
 module "instances" {
@@ -59,10 +68,11 @@ module "instances" {
   service_account_email = var.service_account_email
   graph_url     = "http://${data.google_compute_instance.graphdb.network_interface[0].network_ip}:7200"
 
-  # notifications
+  # tokens
   lakefs_endpoint = var.lakefs_endpoint
   lakefs_access_key = var.lakefs_access_key
   lakefs_secret_key = var.lakefs_secret_key
+  zenodo_access_token = var.zenodo_access_token
   dagster_slack_token = var.dagster_slack_token
 
   # network configurations
@@ -73,4 +83,9 @@ module "instances" {
   s3_region     = module.storage.s3_region
   s3_access_key = module.storage.s3_access_key
   s3_secret_key = module.storage.s3_secret_key
+
+  database_host = module.database.private_ip_address
+  database_user = module.database.database_user
+  database_name = module.database.database_name
+  database_password = var.database_password
 }

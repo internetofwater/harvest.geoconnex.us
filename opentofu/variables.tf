@@ -66,14 +66,29 @@ variable "lakefs_endpoint" {
 variable "lakefs_access_key" {
   description = "Lakefs Access Key"
   type        = string
+  sensitive   = true
 }
 
 variable "lakefs_secret_key" {
   description = "Lakefs Secret Key"
   type        = string
+  sensitive   = true
+}
+
+variable "zenodo_access_token" {
+  description = "Zenodo Access Token"
+  type        = string
+  sensitive   = true
 }
 
 variable "dagster_slack_token" {
   description = "Dagster slack token"
   type        = string
+  sensitive   = true
+}
+
+variable "database_password" {
+  description = "Password for the database user"
+  type        = string
+  sensitive   = true
 }
