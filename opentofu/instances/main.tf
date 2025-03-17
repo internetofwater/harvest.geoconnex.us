@@ -78,6 +78,7 @@ resource "google_compute_instance" "harvest_vm" {
     LAKEFS_ACCESS_KEY_ID=${var.lakefs_access_key}
     LAKEFS_SECRET_ACCESS_KEY=${var.lakefs_secret_key}
     ZENODO_ACCESS_TOKEN=${var.zenodo_access_token}
+    ZENODO_SANDBOX_ACCESS_TOKEN=unset
 
     ENV
 
