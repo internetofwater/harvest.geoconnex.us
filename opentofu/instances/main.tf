@@ -51,6 +51,7 @@ resource "google_compute_instance" "harvest_vm" {
     # Nabu
     NABU_PROFILING=false
     NABU_LOG_LEVEL=ERROR
+    NABU_BATCH_SIZE=${var.nabu_batch_size}
 
     # Minio
     GLEANERIO_MINIO_ADDRESS=storage.googleapis.com

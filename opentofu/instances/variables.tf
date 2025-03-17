@@ -14,6 +14,12 @@ variable "disk_size" {
   default     = 24
 }
 
+variable "nabu_batch_size" {
+  description = "Size of Nabu batches"
+  type        = number
+  default     = 8
+}
+
 variable "enable_public_url" {
   description = "Boolean if running Caddy for HTTPS"
   type        = bool
