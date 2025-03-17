@@ -46,6 +46,7 @@ resource "google_compute_instance" "harvest_vm" {
     GLEANER_HEADLESS_ENDPOINT=${var.headless_url}
     REMOTE_GLEANER_SITEMAP=${var.sitemap_url}
     GLEANER_THREADS=10
+    GLEANER_THREADS=15
 
     # Nabu
     NABU_PROFILING=false
