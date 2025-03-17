@@ -11,7 +11,13 @@ variable "instance_os" {
 variable "disk_size" {
   description = "Boot disk size for each VM instance (in GB)"
   type        = number
-  default     = 100
+  default     = 24
+}
+
+variable "nabu_batch_size" {
+  description = "Size of Nabu batches"
+  type        = number
+  default     = 8
 }
 
 variable "enable_public_url" {
@@ -24,7 +30,7 @@ variable "enable_public_url" {
 variable "machine_type" {
   description = "Machine type for GCP instances (overrides instance_type in production)"
   type        = string
-  default     = "e2-highcpu-32"
+  default     = "e2-highcpu-16"
 }
 
 variable "zone" {
@@ -85,6 +91,7 @@ variable "url" {
 variable "graph_url" {
   description = "Graph URL"
   type        = string
+  default     = "http://graphdb:7200"
 }
 
 variable "scheduler_version" {
@@ -139,9 +146,38 @@ variable "lakefs_endpoint" {
 variable "lakefs_access_key" {
   description = "Lakefs Access Key"
   type        = string
+  sensitive   = true
 }
 
 variable "lakefs_secret_key" {
   description = "Lakefs Secret Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "zenodo_access_token" {
+  description = "Zenodo Access Token"
+  type        = string
+  sensitive   = true
+}
+
+variable "database_host" {
+  description = "Database Hostname"
+  type        = string
+}
+
+variable "database_user" {
+  description = "Database Username"
+  type        = string
+}
+
+variable "database_password" {
+  description = "Database Password"
+  type        = string
+  sensitive   = true
+}
+
+variable "database_name" {
+  description = "Database Name"
   type        = string
 }

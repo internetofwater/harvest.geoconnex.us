@@ -31,24 +31,27 @@ resource "google_compute_instance" "harvest_vm" {
     echo "Startup script initiated" > /var/log/startup.log
 
     # Step 1: Install Docker
-    curl -O https://cgs-earth.github.io/script-cache/install_docker.sh
-    bash install_docker.sh
+    curl -sSL https://cgs-earth.github.io/script-cache/install_docker.sh | bash
 
     # Step 2: Install Scheduler
+    echo "Downloading Scheduler" >> /var/log/startup.log
     apt install -y git
     sudo git clone --branch "${var.scheduler_version}" https://github.com/internetofwater/scheduler.git /opt/scheduler
 
     # Step 3: Set up Scheduler Environment
     cd /opt/scheduler
     cat <<ENV | sudo tee /opt/scheduler/.env > /dev/null
-    GLEANER_HEADLESS_ENDPOINT=${var.headless_url}
-    # remote sitemap tells us which sources we use to create the gleaner config
-    REMOTE_GLEANER_SITEMAP=${var.sitemap_url}
-    GLEANER_THREADS=5
 
-    # Docker
-    GLEANER_IMAGE=internetofwater/gleaner:latest
-    NABU_IMAGE=internetofwater/nabu:latest
+    # Gleaner
+    GLEANER_HEADLESS_ENDPOINT=${var.headless_url}
+    REMOTE_GLEANER_SITEMAP=${var.sitemap_url}
+    GLEANER_THREADS=10
+    GLEANER_THREADS=15
+
+    # Nabu
+    NABU_PROFILING=false
+    NABU_LOG_LEVEL=ERROR
+    NABU_BATCH_SIZE=${var.nabu_batch_size}
 
     # Minio
     GLEANERIO_MINIO_ADDRESS=storage.googleapis.com
@@ -60,45 +63,42 @@ resource "google_compute_instance" "harvest_vm" {
     MINIO_SECRET_KEY=${var.s3_secret_key}
 
     # GraphDB
-    GLEANERIO_GRAPH_URL=http://graphdb:7200
+    GLEANERIO_GRAPH_URL=${var.graph_url}
     GLEANERIO_GRAPH_NAMESPACE=${var.data_graph}
     GLEANERIO_DATAGRAPH_ENDPOINT=${var.data_graph}
     GLEANERIO_PROVGRAPH_ENDPOINT=${var.prov_graph}
 
-    # Dagster
-    DAGSTER_POSTGRES_USER=postgres
-    DAGSTER_POSTGRES_PASSWORD=postgres_password
-    DAGSTER_POSTGRES_DB=postgres_db
-    ## This should match the env vars for dagster postgres
-    POSTGRES_USER=postgres
-    POSTGRES_PASSWORD=postgres_password
-    POSTGRES_DB=postgres_db
+    # Database
+    DAGSTER_POSTGRES_HOST=${var.database_host}
+    DAGSTER_POSTGRES_USER=${var.database_user}
+    DAGSTER_POSTGRES_PASSWORD=${var.database_password}
+    DAGSTER_POSTGRES_DB=${var.database_name}
 
     # Integrations / Notifications
     DAGSTER_SLACK_TOKEN=${var.dagster_slack_token}
     LAKEFS_ENDPOINT_URL=${var.lakefs_endpoint}
     LAKEFS_ACCESS_KEY_ID=${var.lakefs_access_key}
     LAKEFS_SECRET_ACCESS_KEY=${var.lakefs_secret_key}
+    ZENODO_ACCESS_TOKEN=${var.zenodo_access_token}
+    ZENODO_SANDBOX_ACCESS_TOKEN=unset
+
     ENV
 
-    # Step 4: Run Scheduler
+    echo "Pulling Scheduler images" >> /var/log/startup.log
     python3 main.py pull --profiles production
+
+    # Step 4: Run Scheduler
     nohup python3 main.py prod --build &
-    echo "Scheduler Started!"
+    echo "Scheduler Started!" >> /var/log/startup.log
 
     if [ ${var.enable_public_url} != "false" ]; then
       # Step 5: Install Caddy
-      curl -O https://cgs-earth.github.io/script-cache/install_caddy.sh
-      bash install_caddy.sh
+      curl -sSL https://cgs-earth.github.io/script-cache/install_caddy.sh | bash
 
       # Step 6: Run Caddy
       cat <<CADDYFILE | sudo tee /etc/caddy/Caddyfile > /dev/null
       ${var.url} {
               reverse_proxy :3000
-      }
-
-      ${var.graph_url} {
-              reverse_proxy :7200
       }
       CADDYFILE
       systemctl restart caddy

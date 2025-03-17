@@ -1,3 +1,8 @@
+output "id" {
+  description = "The id of the network"
+  value       = google_compute_network.default.id
+}
+
 output "network_name" {
   description = "The name of the network"
   value       = google_compute_network.default.name
