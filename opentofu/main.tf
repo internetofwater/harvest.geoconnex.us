@@ -48,6 +48,7 @@ module "graphdb" {
   zone              = var.zone
   boot_disk_size    = 250
   network_interface = module.network.network_name
+  allowed_ingress_cidrs = ["10.0.0.0/8", "192.168.0.0/16"]
 }
 
 data "google_compute_instance" "graphdb" {

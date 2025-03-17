@@ -35,18 +35,6 @@ resource "google_compute_firewall" "allow_ssh" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-resource "google_compute_firewall" "allow_graph" {
-  name    = "allow-graph"
-  network = google_compute_network.default.name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["7200"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-}
-
 resource "google_compute_firewall" "allow_dagster" {
   name    = "allow-dagster"
   network = google_compute_network.default.name
