@@ -43,10 +43,11 @@ resource "google_compute_instance" "harvest_vm" {
     cat <<ENV | sudo tee /opt/scheduler/.env > /dev/null
 
     # Gleaner
-    GLEANER_HEADLESS_ENDPOINT=${var.headless_url}
-    REMOTE_GLEANER_SITEMAP=${var.sitemap_url}
-    GLEANER_THREADS=10
-    GLEANER_THREADS=15
+    HEADLESS_ENDPOINT=${var.headless_url}
+    GLEANER_SITEMAP_INDEX=${var.sitemap_url}
+    GLEANER_CONCURRENT_SITEMAPS=10
+    GLEANER_SITEMAP_WORKERS=10
+    GLEANER_LOG_LEVEL=ERROR
 
     # Nabu
     NABU_PROFILING=false
@@ -54,19 +55,18 @@ resource "google_compute_instance" "harvest_vm" {
     NABU_BATCH_SIZE=${var.nabu_batch_size}
 
     # Minio
-    GLEANERIO_MINIO_ADDRESS=storage.googleapis.com
-    GLEANERIO_MINIO_PORT=443
-    GLEANERIO_MINIO_USE_SSL=true
-    GLEANERIO_MINIO_BUCKET=${var.s3_bucket}
-    GLEANERIO_MINIO_REGION=${var.s3_region}
-    MINIO_ACCESS_KEY=${var.s3_access_key}
-    MINIO_SECRET_KEY=${var.s3_secret_key}
+    S3_ADDRESS=storage.googleapis.com
+    S3_PORT=443
+    S3_USE_SSL=true
+    S3_SECRET_KEY=${var.s3_secret_key}
+    S3_ACCESS_KEY=${var.s3_access_key}
+    S3_DEFAULT_BUCKET=${var.s3_bucket}
+    S3_REGION=${var.s3_region}
 
     # GraphDB
-    GLEANERIO_GRAPH_URL=${var.graph_url}
-    GLEANERIO_GRAPH_NAMESPACE=${var.data_graph}
-    GLEANERIO_DATAGRAPH_ENDPOINT=${var.data_graph}
-    GLEANERIO_PROVGRAPH_ENDPOINT=${var.prov_graph}
+    TRIPLESTORE_URL=${var.graph_url}
+    DATAGRAPH_REPOSITORY=${var.data_graph}
+    PROVGRAPH_REPOSITORY=${var.prov_graph}
 
     # Database
     DAGSTER_POSTGRES_HOST=${var.database_host}
