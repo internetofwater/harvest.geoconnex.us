@@ -48,11 +48,14 @@ resource "google_compute_instance" "harvest_vm" {
     GLEANER_CONCURRENT_SITEMAPS=10
     GLEANER_SITEMAP_WORKERS=10
     GLEANER_LOG_LEVEL=ERROR
+    GLEANER_SHACL_VALIDATOR_GRPC_ENDPOINT=scheduler_shacl_validator:50051
+    GLEANER_USE_SHACL=true
 
     # Nabu
     NABU_PROFILING=false
     NABU_LOG_LEVEL=ERROR
     NABU_BATCH_SIZE=${var.nabu_batch_size}
+    NABU_IMAGE=internetofwater/nabu:latest
 
     # Minio
     S3_ADDRESS=storage.googleapis.com
@@ -85,10 +88,10 @@ resource "google_compute_instance" "harvest_vm" {
     ENV
 
     echo "Pulling Scheduler images" >> /var/log/startup.log
-    python3 main.py pull --profiles production
+    make pull
 
     # Step 4: Run Scheduler
-    nohup python3 main.py prod --build &
+    nohup make cloudProd &
     echo "Scheduler Started!" >> /var/log/startup.log
 
     if [ ${var.enable_public_url} != "false" ]; then
