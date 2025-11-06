@@ -32,6 +32,11 @@ variable "s3_bucket" {
   type        = string
 }
 
+variable "s3_metadata_bucket" {
+  description = "GCP bucket name for storing metadata"
+  type        = string
+}
+
 variable "url" {
   description = "URL Host"
   type        = string
@@ -77,6 +82,12 @@ variable "lakefs_secret_key" {
 
 variable "zenodo_access_token" {
   description = "Zenodo Access Token"
+  type        = string
+  sensitive   = true
+}
+
+variable "ghcr_token" {
+  description = "GitHub Container Registry Token"
   type        = string
   sensitive   = true
 }

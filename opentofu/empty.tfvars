@@ -12,3 +12,4 @@ lakefs_secret_key   =
 zenodo_access_token =
 dagster_slack_token =
 database_password   =
+ghcr_token          = 

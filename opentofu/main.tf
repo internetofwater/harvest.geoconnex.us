@@ -39,6 +39,7 @@ module "storage" {
   project = var.project
   region  = var.region
   s3_bucket  = var.s3_bucket
+  s3_metadata_bucket = var.s3_metadata_bucket
 }
 
 module "graphdb" {
@@ -48,7 +49,7 @@ module "graphdb" {
   zone              = var.zone
   boot_disk_size    = 250
   network_interface = module.network.network_name
-  allowed_ingress_cidrs = ["10.0.0.0/8", "192.168.0.0/16"]
+  allowed_ingress_cidrs = ["10.0.0.0/8", "192.168.0.0/16", "35.191.0.0/16"]
 }
 
 data "google_compute_instance" "graphdb" {
@@ -75,12 +76,14 @@ module "instances" {
   lakefs_secret_key = var.lakefs_secret_key
   zenodo_access_token = var.zenodo_access_token
   dagster_slack_token = var.dagster_slack_token
+  ghcr_token = var.ghcr_token
 
   # network configurations
   network_name  = module.network.network_name
   static_ip     = module.network.static_ip
 
   s3_bucket     = module.storage.s3_bucket
+  s3_metadata_bucket = var.s3_metadata_bucket
   s3_region     = module.storage.s3_region
   s3_access_key = module.storage.s3_access_key
   s3_secret_key = module.storage.s3_secret_key

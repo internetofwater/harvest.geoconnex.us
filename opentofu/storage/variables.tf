@@ -17,3 +17,8 @@ variable "s3_bucket" {
   description = "GCP bucket"
   type        = string
 }
+
+variable "s3_metadata_bucket" {
+  description = "GCP bucket"
+  type        = string
+}
