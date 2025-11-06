@@ -68,6 +68,11 @@ variable "s3_bucket" {
   type        = string
 }
 
+variable "s3_metadata_bucket" {
+  description = "GCP bucket"
+  type        = string
+}
+
 variable "s3_region" {
   description = "S3 Region"
   type        = string
@@ -92,6 +97,11 @@ variable "graph_url" {
   description = "Graph URL"
   type        = string
   default     = "http://graphdb:7200"
+}
+
+variable "ghcr_token" {
+  description = "GitHub Container Registry Token"
+  type        = string
 }
 
 variable "scheduler_version" {
