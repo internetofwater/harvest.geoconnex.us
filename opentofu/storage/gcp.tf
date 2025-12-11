@@ -8,25 +8,6 @@ resource "google_storage_bucket" "harvest_bucket" {
   versioning {
     enabled = false
   }
-
-  lifecycle_rule {
-    action {
-      type = "SetStorageClass"
-      storage_class = "COLDLINE"
-    }
-    condition {
-      age = 7  # Move to Coldline after 7 days
-    }
-  }
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      age = 30
-    }
-  }
 }
 
 resource "google_storage_bucket" "metadata_bucket" {
@@ -47,14 +28,6 @@ resource "google_storage_bucket" "metadata_bucket" {
     enabled = false
   }
 
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      age = 180
-    }
-  }
 }
 
 resource "google_storage_bucket_iam_member" "bucket_access" {
