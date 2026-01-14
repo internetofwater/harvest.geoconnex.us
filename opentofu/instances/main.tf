@@ -61,6 +61,8 @@ resource "google_compute_instance" "harvest_vm" {
     NABU_BATCH_SIZE=${var.nabu_batch_size}
     NABU_IMAGE=internetofwater/nabu:latest
 
+    MAINSTEM_FILE=reference_catchments_and_flowlines.fgb
+
     # Minio
     S3_ADDRESS=storage.googleapis.com
     S3_PORT=443
