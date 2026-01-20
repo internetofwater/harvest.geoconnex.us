@@ -4,6 +4,18 @@ provider "google" {
   credentials = file(var.credentials) 
 }
 
+terraform {
+  required_version = ">= 1.5.0"
+
+  # storage location for terraform state
+  backend "gcs" {
+    # store terraform state in a bucket isolated from other data
+    bucket  = var.s3_terraform_state_bucket 
+    prefix  = "${var.project}/terraform.tfstate" 
+    credentials = file("${var.credentials}")
+  }
+}
+
 resource "google_project_service" "required_apis" {
   for_each = toset([
     "compute.googleapis.com",

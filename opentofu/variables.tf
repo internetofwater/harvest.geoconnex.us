@@ -37,6 +37,11 @@ variable "s3_metadata_bucket" {
   type        = string
 }
 
+variable "s3_terraform_state_bucket" {
+  description = "GCP bucket name for storing terraform state"
+  type        = string
+}
+
 variable "url" {
   description = "URL Host"
   type        = string
