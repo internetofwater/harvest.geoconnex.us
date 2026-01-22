@@ -11,7 +11,7 @@ variable "instance_os" {
 variable "disk_size" {
   description = "Boot disk size for each VM instance (in GB)"
   type        = number
-  default     = 24
+  default     = 80
 }
 
 variable "nabu_batch_size" {
