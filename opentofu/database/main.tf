@@ -19,6 +19,9 @@ resource "google_sql_database_instance" "postgres" {
       name  = "max_connections"
       value = "1000"
     }
+    user_labels = {
+      "id" = "dagster-database"
+    }
   }
 
   deletion_protection = true
