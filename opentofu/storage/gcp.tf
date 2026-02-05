@@ -10,6 +10,18 @@ resource "google_storage_bucket" "harvest_bucket" {
   }
 }
 
+resource "google_storage_bucket" "terraform_state_bucket" {
+  name = var.s3_metadata_bucket
+  location = var.region
+
+  storage_class = "STANDARD"
+  uniform_bucket_level_access = true 
+
+  versioning {
+    enabled = true
+  }
+}
+
 resource "google_storage_bucket" "metadata_bucket" {
   name          = var.s3_metadata_bucket
   location      = var.region
@@ -40,6 +52,12 @@ resource "google_storage_bucket_iam_member" "metadata_bucket_access" {
   bucket = google_storage_bucket.metadata_bucket.name
   role   = "roles/storage.objectViewer"
   member = "allUsers"
+}
+
+resource "google_storage_bucket_iam_member" "terraform_state_bucket_access" {
+  bucket = google_storage_bucket.terraform_state_bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${var.service_account_email}"
 }
 
 resource "google_storage_hmac_key" "hmac_key" {
