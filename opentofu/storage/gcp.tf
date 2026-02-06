@@ -11,7 +11,7 @@ resource "google_storage_bucket" "harvest_bucket" {
 }
 
 resource "google_storage_bucket" "terraform_state_bucket" {
-  name = var.s3_metadata_bucket
+  name = var.s3_terraform_state_bucket
   location = var.region
 
   storage_class = "STANDARD"

@@ -12,7 +12,7 @@ terraform {
     # store terraform state in a bucket isolated from other data
     bucket  = var.s3_terraform_state_bucket 
     prefix  = "${var.project}/terraform.tfstate" 
-    credentials = file("${var.credentials}")
+    credentials = file(var.credentials)
   }
 }
 
@@ -52,6 +52,7 @@ module "storage" {
   region  = var.region
   s3_bucket  = var.s3_bucket
   s3_metadata_bucket = var.s3_metadata_bucket
+  s3_terraform_state_bucket = var.s3_terraform_state_bucket
 }
 
 module "graphdb" {
