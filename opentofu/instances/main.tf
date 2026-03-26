@@ -28,9 +28,12 @@ resource "google_compute_instance" "harvest_vm" {
 
   metadata_startup_script = <<-EOF
     #!/bin/bash
+    set -e
+
     echo "Startup script initiated" > /var/log/startup.log
 
     # Step 0: Update and install prerequisites
+    apt update -y
     apt install -y git build-essential
     curl -sSL https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh | bash
     systemctl restart google-cloud-ops-agent
@@ -49,7 +52,7 @@ resource "google_compute_instance" "harvest_vm" {
     # Gleaner
     HEADLESS_ENDPOINT=${var.headless_url}
     GLEANER_SITEMAP_INDEX=${var.sitemap_url}
-    GLEANER_CONCURRENT_SITEMAPS=5
+    GLEANER_CONCURRENT_SITEMAPS=4
     GLEANER_SITEMAP_WORKERS=5
     GLEANER_LOG_LEVEL=INFO
     GLEANER_SHACL_VALIDATOR_GRPC_ENDPOINT=scheduler_shacl_validator:50051
