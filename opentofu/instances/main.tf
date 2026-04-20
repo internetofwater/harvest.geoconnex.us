@@ -34,7 +34,7 @@ resource "google_compute_instance" "harvest_vm" {
 
     # Step 0: Update and install prerequisites
     apt update -y
-    apt install -y git build-essential
+    apt install -y git build-essential gdal-bin libgdal-dev
     curl -sSL https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh | bash
     systemctl restart google-cloud-ops-agent
 
