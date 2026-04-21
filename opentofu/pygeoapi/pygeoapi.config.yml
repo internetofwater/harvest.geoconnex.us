@@ -92,4 +92,4 @@ resources:
           search_path: [public]
         table: geoconnex_features
         id_field: id
-        geom_field: geom
+        geom_field: geometry

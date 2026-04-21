@@ -44,10 +44,10 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
       # the cloud run service dependent on itself which terraform
       # does not allow; thus this needs to be set manually after deployment
 
-      # env {
-      #   name= "PYGEOAPI_URL"
-      #   value = google_cloud_run_v2_service.pygeoapi.uri
-      # }
+      env {
+        name= "PYGEOAPI_URL"
+        value = "https://features.geoconnex.us"
+      }
 
       env {
         name  = "PYGEOAPI_CONFIG"
@@ -109,9 +109,15 @@ resource "google_storage_bucket_iam_member" "pygeoapi_access" {
   member = "serviceAccount:${var.service_account_email}"
 }
 
+# resource "google_cloud_run_domain_mapping" "default" {
+#   location = var.region
+#   name     = "features.geoconnex.us"
 
-resource "google_project_iam_member" "cloudsql_client" {
-  project = var.project_id
-  role    = "roles/cloudsql.client"
-  member  = "serviceAccount:${var.service_account_email}"
-}
+#   metadata {
+#     namespace = var.project_id
+#   }
+
+#   spec {
+#     route_name = google_cloud_run_v2_service.pygeoapi.name
+#   }
+# }
