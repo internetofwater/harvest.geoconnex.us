@@ -38,3 +38,58 @@ resource "google_sql_user" "dagster" {
   instance = google_sql_database_instance.postgres.name
   password = var.database_password
 }
+
+resource "google_cloud_run_v2_job" "postgis_setup" {
+  name     = "postgis-extension-setup"
+  location = var.region
+  template {
+    template {
+      containers {
+        image = "postgres:16"
+
+        env {
+          name  = "PGHOST"
+          value = "/cloudsql/${google_sql_database_instance.postgres.connection_name}"
+        }
+        env {
+          name  = "PGDATABASE"
+          value = google_sql_database.dagster.name
+        }
+        env {
+          name  = "PGUSER"
+          value = google_sql_user.dagster.name
+        }
+        env {
+          name  = "PGPASSWORD"
+          value = var.database_password
+        }
+
+        command = [
+          "/bin/bash",
+          "-c",
+          <<-EOT
+            psql -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+            psql -c "CREATE EXTENSION IF NOT EXISTS postgis_topology;"
+            psql -c "CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;"
+            psql -c "CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;"
+            psql -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
+          EOT
+        ]
+
+        volume_mounts {
+          name = "cloudsql"
+          mount_path = "/cloudsql"
+        }
+      }
+
+      volumes {
+        name = "cloudsql"
+        cloud_sql_instance {
+          instances = [google_sql_database_instance.postgres.connection_name]
+        }
+      }
+    }
+  }
+
+  deletion_protection = false
+}
