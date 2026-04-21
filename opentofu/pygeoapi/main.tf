@@ -16,23 +16,11 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
         bucket = var.config_bucket
       }
     }
-    # dont think we need jobs for now so this is commented out
-    # volumes {
-    #   name = "job-store"
-    #   gcs {
-    #     bucket = "${google_storage_bucket.bucket.name}/job_results"
-    #   }
-    # }
-
     containers {
       image = "ghcr.io/internetofwater/pygeoapi:latest"
       ports {
         container_port = 80
       }
-      #   volume_mounts {
-      #     name       = "job-store"
-      #     mount_path = "/job_results"
-      #   }
 
       # ideally this would be set here; however, that would make
       # the cloud run service dependent on itself which terraform
@@ -43,10 +31,6 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
       #   value = google_cloud_run_v2_service.pygeoapi.uri
       # }
 
-      #   env {
-      #     name = "PYGEOAPI_JOB_RESULT_DIR"
-      #     value = "/job_results"
-      #   }
       env {
         name  = "PYGEOAPI_CONFIG"
         value = "/config/pygeoapi/pygeoapi.config.yml"
@@ -70,10 +54,6 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
         value = var.POSTGRES_DB
       }
 
-      #   env {
-      #     name = "REDIS_HOST"
-      #     value = google_redis_instance.redis.host
-      #   }
 
       resources {
         limits = {
