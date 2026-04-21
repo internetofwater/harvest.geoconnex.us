@@ -17,7 +17,7 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
       }
     }
     containers {
-      image = "ghcr.io/internetofwater/pygeoapi:latest"
+      image = "internetofwater/pygeoapi:latest"
       ports {
         container_port = 80
       }
