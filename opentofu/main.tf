@@ -68,12 +68,13 @@ module "graphdb" {
 module "pygeoapi" {
   source = "./pygeoapi"
   region = var.region
-  config_bucket      = module.storage.s3_bucket   # or another GCS bucket
+  config_bucket      = module.storage.s3_bucket
   POSTGRES_PASSWORD = var.database_password
   POSTGRES_USER     = module.database.database_user
-  POSTGRES_DB       = var.database
+  POSTGRES_DB       = module.database.database_name
   POSTGRES_HOST     = module.database.private_ip_address
   service_account_email = var.service_account_email
+  db_connection_name = module.database.connection_name
 }
 
 data "google_compute_instance" "graphdb" {

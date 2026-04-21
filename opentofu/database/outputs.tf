@@ -22,3 +22,8 @@ output "private_ip_address" {
   description = "The private IP address of the database instance"
   value       = google_sql_database_instance.postgres.private_ip_address
 }
+
+
+output "connection_name" {
+  value = google_sql_database_instance.postgres.connection_name
+}
