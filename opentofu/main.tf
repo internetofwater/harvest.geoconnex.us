@@ -75,6 +75,7 @@ module "pygeoapi" {
   POSTGRES_HOST     = module.database.private_ip_address
   service_account_email = var.service_account_email
   db_connection_name = module.database.connection_name
+  project_id = var.project
 }
 
 data "google_compute_instance" "graphdb" {

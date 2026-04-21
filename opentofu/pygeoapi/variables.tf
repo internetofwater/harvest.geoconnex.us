@@ -38,3 +38,8 @@ variable "db_connection_name" {
   description = "Database connection name"
   type        = string
 }
+
+variable "project_id" {
+  description = "GCP project ID"
+  type        = string
+}

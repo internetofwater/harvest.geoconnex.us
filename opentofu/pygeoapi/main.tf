@@ -6,6 +6,7 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
   ingress = "INGRESS_TRAFFIC_ALL"
 
   template {
+    service_account = var.service_account_email
     scaling {
       max_instance_count = 2
       min_instance_count = 1
@@ -14,6 +15,13 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
       name = "config-volume"
       gcs {
         bucket = var.config_bucket
+      }
+    }
+
+    volumes {
+      name = "cloudsql"
+      cloud_sql_instance {
+        instances = [var.db_connection_name]
       }
     }
     containers {
@@ -27,6 +35,10 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
         mount_path = "/config"
       }
 
+      volume_mounts {
+        name       = "cloudsql"
+        mount_path = "/cloudsql"
+      }
 
       # ideally this would be set here; however, that would make
       # the cloud run service dependent on itself which terraform
@@ -60,10 +72,9 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
         value = var.POSTGRES_DB
       }
 
-
       resources {
         limits = {
-          cpu    = "3"
+          cpu    = "2"
           memory = "2Gi"
         }
         cpu_idle = false
@@ -72,11 +83,9 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
   }
 
   traffic {
-    # all traffic should go to the latest version
     percent = 100
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
-
 }
 
 
@@ -91,4 +100,11 @@ resource "google_storage_bucket_iam_member" "pygeoapi_access" {
   bucket = var.config_bucket
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${var.service_account_email}"
+}
+
+
+resource "google_project_iam_member" "cloudsql_client" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${var.service_account_email}"
 }
