@@ -22,6 +22,12 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
         container_port = 80
       }
 
+      volume_mounts {
+        name       = "config-volume"
+        mount_path = "/config"
+      }
+
+
       # ideally this would be set here; however, that would make
       # the cloud run service dependent on itself which terraform
       # does not allow; thus this needs to be set manually after deployment
