@@ -1,45 +1,15 @@
-#
-# LAST UPDATE: 2026-01-14
-#=================================================================
-#
-# Authors: Benjamin Webb <bwebb@lincolninst.edu
-#
-# Copyright (c) 2026 Lincoln Institute of Land Policy
-#
-# Permission is hereby granted, free of charge, to any person
-# obtaining a copy of this software and associated documentation
-# files (the "Software"), to deal in the Software without
-# restriction, including without limitation the rights to use,
-# copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following
-# conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
-#
-# =================================================================
-
 server:
   bind:
     host: localhost #change to your hostname if running your own instance
-    port: 5000
-  url: ${PYGEOAPI_URL} #change to host URL  if running your own instance
+    port: 5005
+  url: ${PYGEOAPI_URL:-http://localhost:5005} #change to host URL  if running your own instance
   mimetype: application/json; charset=UTF-8
   encoding: utf-8
   gzip: true
   language: en-US
   cors: true
   pretty_print: true
+  # admin: true
   limits:
     default_items: 500
     max_items: 10000
@@ -47,27 +17,35 @@ server:
     url: https://tile.openstreetmap.org/{z}/{x}/{y}.png
     attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
 
+  # manager:
+  #   name: PostgreSQL
+  #   output_dir: ${PYGEOAPI_JOB_RESULT_DIR:-/tmp}
+  #   connection:
+  #     host: ${TF_VAR_POSTGRES_HOST:-localhost}
+  #     port: 5432
+  #     database: ${TF_VAR_POSTGRES_DB}
+  #     user: ${TF_VAR_POSTGRES_USER:-postgres}
+  #     password: ${TF_VAR_POSTGRES_PASSWORD:-password}
+      
 logging:
-  level: ${PYGEOAPI_LOGLEVEL:-ERROR}
+  level: ${PYGEOAPI_LOGLEVEL:-WARNING}
   # logfile: /tmp/pygeoapi.log
 
 metadata:
   identification:
-    title: Geoconnex Reference Service
-    description: Provides reference for community features in geoconnex.us
+    title: Geoconnex
+    description: An OGC API Features endpoint for Geoconnex Features
     keywords:
-      - Geospatial
-      - Geoconnex
-      - Reference
+      - geoconnex
     keywords_type: theme
-    terms_of_service: https://creativecommons.org/licenses/by/4.0/
-    url: https://github.com/internetofwater/reference.geoconnex.us
+    terms_of_service: https://opensource.org/license/MIT
+    url: https://github.com/cgs-earth/ArizonaWaterObservatory
   license:
-    name: CC-BY 4.0 license
-    url: https://creativecommons.org/licenses/by/4.0/
+    name: MIT License
+    url: https://opensource.org/license/MIT
   provider:
-    name: Center for Geospatial Solutions
-    url: https://cgsearth.org/
+    name: Internet of Water
+    url: https://github.com/internetofwater
   contact:
     address: 113 Brattle St
     city: Cambridge
@@ -75,659 +53,43 @@ metadata:
     postalcode: 02138
     country: USA
     email: internetofwater@lincolninst.edu
-    url: https://internetofwater.org
+    url: https://cgsearth.org
     role: pointOfContact
-    name: Benjamin Webb
+    name: Colton Loftus
 
 resources:
-  hu02:
+        
+  GeoconnexFeatures:
     type: collection
-    title: HU02
-    description: Two-digit Hydrologic Regions from USGS NHDPlus High Resolution
-    keywords:
-      - Hydrologic Regions
-      - HU02
-      - USGS
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          name: schema:name
-          gnis_url:
-            "@id": schema:subjectOf
-            "@type": "@id"
-    links:
-      - <<: *data_link
-        href: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
-      - <<: *data_link
-        href: https://water.usgs.gov/themes/hydrologic-units/
-        title: Hydrologic Unit Documentation
-    extents: &extents
-      spatial:
-        bbox: [-170, 15, -51, 72]
-        crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
-      temporal:
-        begin: null
-        end: null
-    providers:
-      - <<: *provider_defaults
-        id_field: huc2
-        table: hu02
-        sparql_query: *huc_sparql_query
-      - <<: *tile_defaults
-        id_field: huc2
-        table: hu02
-  hu04:
-    type: collection
-    title: HU04
-    description: Four-digit Hydrologic Subregion from USGS NHDPlus High Resolution
-    keywords:
-      - Hydrologic Subregions
-      - HU04
-      - USGS
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/hu04
-    links:
-      - <<: *data_link
-        href: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
-      - <<: *data_link
-        href: https://water.usgs.gov/themes/hydrologic-units/
-        title: Hydrologic Unit Documentation
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        id_field: huc4
-        table: hu04
-        sparql_query: *huc_sparql_query
-      - <<: *tile_defaults
-        id_field: huc4
-        table: hu04
-  hu06:
-    type: collection
-    title: HU06
-    description: Six-digit Hydrologic Basins from USGS NHDPlus High Resolution
-    keywords:
-      - Hydrologic Basins
-      - HU06
-      - USGS
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/hu06
-    links:
-      - <<: *data_link
-        href: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
-      - <<: *data_link
-        href: https://water.usgs.gov/themes/hydrologic-units/
-        title: Hydrologic Unit Documentation
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        id_field: huc6
-        table: hu06
-        sparql_query: *huc_sparql_query
-      - <<: *tile_defaults
-        id_field: huc6
-        table: hu06
-  hu08:
-    type: collection
-    title: HU08
-    description: Eight-digit Hydrologic Subbasins from USGS NHDPlus High Resolution
-    keywords:
-      - Hydrologic Subbasins
-      - HU08
-      - USGS
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/hu08
-    links:
-      - <<: *data_link
-        href: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
-      - <<: *data_link
-        href: https://water.usgs.gov/themes/hydrologic-units/
-        title: Hydrologic Unit Documentation
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        id_field: huc8
-        table: hu08
-        sparql_query:
-          <<: *huc_sparql_query
-          select: '?huc (GROUP_CONCAT(?containedCatchment; SEPARATOR="|") AS ?hucs)'
-      - <<: *tile_defaults
-        id_field: huc8
-        table: hu08
-  hu10:
-    type: collection
-    title: HU10
-    description: Ten-digit Watersheds from USGS NHDPlus High Resolution
-    keywords:
-      - Watersheds
-      - HU10
-      - USGS
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/hu10
-    links:
-      - <<: *data_link
-        href: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
-      - <<: *data_link
-        href: https://water.usgs.gov/themes/hydrologic-units/
-        title: Hydrologic Unit Documentation
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: huc10
-        table: hu10
-      - <<: *tile_defaults
-        id_field: huc10
-        table: hu10
-        min_pixel: 1024
-
-  hu12:
-    type: collection
-    title: HU12
-    description: Twelve-digit Subwatershed from USGS Water Boundary Dataset (WBD)
-    keywords:
-      - Subwatershed
-      - HU12
-      - USGS
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/hu12
-    links:
-      - <<: *data_link
-        href: https://doi.org/10.5066/P1HR67C5
-      - <<: *data_link
-        href: https://water.usgs.gov/themes/hydrologic-units/
-        title: Hydrologic Unit Documentation
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: huc12
-        table: reference_huc12
-      - <<: *tile_defaults
-        id_field: huc12
-        table: reference_huc12
-        layer: hu12
-        min_pixel: 1024
-  nat_aq:
-    type: collection
-    title: USGS National Aquifers
-    description: National Aquifers of the United States from USGS National Water Information System National Aquifer code list
-    keywords:
-      - National Aquifers
-      - USGS
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          aq_name: schema:name
-          link:
-            "@id": schema:subjectOf
-            "@type": "@id"
-          sameas:
-            "@id": schema:sameAs
-            "@type": "@id"
-    links:
-      - <<: *data_link
-        href: https://cida.usgs.gov/ngwmn/
-      - <<: *data_link
-        title: code list with links
-        href: https://water.usgs.gov/ogw/NatlAqCode-reflist.html
-    extents:
-      spatial:
-        bbox: [-160, 18, -64, 50]
-        crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
-      temporal:
-        begin: null
-        end: null
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: nat_aqfr_cd
-        title_field: aq_name
-        table: nat_aq
-      - <<: *tile_defaults
-        id_field: nat_aqfr_cd
-        table: nat_aq
-  principal_aq:
-    type: collection
-    title: USGS Principal Aquifers
-    description: Principal Aquifers of the United States from 2003 USGS data release
-    keywords:
-      - Principal Aquifers
-      - USGS
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          aq_name: schema:name
-          sameas:
-            "@id": schema:sameAs
-            "@type": "@id"
-    links:
-      - <<: *data_link
-        href: https://water.usgs.gov/GIS/metadata/usgswrd/XML/aquifers_us.xml
-    extents:
-      spatial:
-        bbox: [-160, 18, -64, 50]
-        crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
-      temporal:
-        begin: null
-        end: null
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: aq_code
-        title_field: aq_name
-        table: princi_aq
-      - <<: *tile_defaults
-        id_field: aq_code
-        table: princi_aq
-        layer: principal_aq
-  sec_hydrg_reg:
-    type: collection
-    title: USGS Secondary Hydrogeologic Regions
-    description: Secondary Hydrogeologic Regions of the Conterminous United States from 2018 USGS data release
-    keywords:
-      - Hydrogeologic Regions
-      - USGS
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          shr: schema:name
-    links:
-      - <<: *data_link
-        href: https://doi.org/10.5066/F7F76BSS
-        hreflang: en-US
-      - <<: *data_link
-        title: report documenting data
-        href: https://doi.org/10.1111/gwat.12806
-    extents:
-      spatial:
-        bbox: [-125, 26, -66, 50]
-        crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
-      temporal:
-        begin: null
-        end: null
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        title_field: shr
-        table: sec_hydrg_reg
-      - <<: *tile_defaults
-        table: sec_hydrg_reg
-  gages: # updated 2025-08-15
-    type: collection
-    title: Reference Gages
-    description: United States Community Contributed Reference Stream Gages
-    keywords:
-      - Stream Gages
-      - USGS
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/gages
-    links:
-      - <<: *data_link
-        href: https://github.com/internetofwater/ref_gages
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        title_field: description
-        table: ref_gages
-  mainstems:
-    type: collection
-    title: Reference Mainstems
-    description: United States Community Contributed Reference Mainstem Rivers
-    keywords:
-      - Mainstem
-      - USGS
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/mainstems
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          name_at_outlet: schema:name
-    links:
-      - <<: *data_link
-        href: https://github.com/internetofwater/ref_rivers
-    extents:
-      spatial:
-        bbox: [-125, 26, -66, 50]
-        crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
-      temporal:
-        begin: null
-        end: null
-    providers:
-      - <<: *provider_defaults
-        title_field: name_at_outlet
-        table: mainstems
-        sparql_query:
-          <<: *sparql_query
-          bind:
-            name: uri
-            variable: "?mainstem"
-          select: "?mainstem ?datasets"
-          where:
-            - "?monitoringLocation hyf:HydroLocationType ?type"
-            - "?monitoringLocation hyf:referencedPosition/hyf:HY_IndirectPosition/hyf:linearElement ?mainstem"
-            - "?monitoringLocation schema:subjectOf ?dataset"
-            - "?monitoringLocation gsp:hasGeometry/gsp:asWKT ?wkt"
-            - "?dataset schema:variableMeasured ?var"
-            - "?dataset schema:url ?url"
-            - "?dataset schema:distribution ?distribution"
-            - "?dataset schema:description ?datasetDescription"
-            - "?dataset schema:temporalCoverage ?temporalCoverage"
-            - "?dataset schema:name ?siteName"
-            - "?var schema:name ?variableMeasured"
-            - "?var schema:unitText ?variableUnit"
-            - "?var schema:measurementTechnique ?measurementTechnique"
-            - "?distribution schema:name ?distributionName"
-            - "?distribution schema:contentUrl ?distributionURL"
-            - "?distribution schema:encodingFormat ?distributionFormat"
-          limit: 100000
-          filter:
-            - |
-              BIND(
-                CONCAT(
-                  '{"monitoringLocation":"', STR(?monitoringLocation),
-                  '","siteName":"', STR(?siteName),
-                  '","datasetDescription":"', STR(?datasetDescription),
-                  '","type":"', STR(?type),
-                  '","url":"', STR(?url),
-                  '","variableMeasured":"', STR(?variableMeasured),
-                  '","variableUnit":"', STR(?variableUnit),
-                  '","measurementTechnique":"', STR(?measurementTechnique),
-                  '","temporalCoverage":"', STR(?temporalCoverage),
-                  '","distributionName":"', STR(?distributionName),
-                  '","distributionURL":"', STR(?distributionURL),
-                  '","distributionFormat":"', STR(?distributionFormat),
-                  '","wkt":"', STR(?wkt), '"}'
-                ) AS ?datasets
-              )
-      - <<: *tile_defaults
-        table: mainstems
-  mainstems_v3:
-    type: collection
-    hidden: true
-    title: Reference Mainstems V3
-    description: United States Community Contributed Reference Mainstem Rivers
-    keywords:
-      - Mainstem
-      - USGS
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/mainstems
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          name_at_outlet: schema:name
-    links:
-      - <<: *data_link
-        href: https://github.com/internetofwater/ref_rivers
-    extents:
-      spatial:
-        bbox: [-125, 26, -66, 50]
-        crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
-      temporal:
-        begin: null
-        end: null
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        table: mainstems_v3
-      - <<: *tile_defaults
-        table: mainstems_v3
-  dams: # updated 2024-04-23
-    type: collection
-    title: Reference Dams
-    description: United States Community Contributed Reference Dams
-    keywords:
-      - Dams
-      - Community
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          name: schema:name
-          description: schema:description
-          provider:
-            "@id": schema:provider
-            "@type": schema:url
-          subjectOf:
-            "@id": schema:subjectOf
-            "@type": schema:url
-    links:
-      - <<: *data_link
-        href: https://github.com/internetofwater/ref_dams
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        title_field: description
-        table: ref_dams
-      - <<: *tile_defaults
-        table: ref_dams
-        layer: dams
-        disable_at_z: 1
-  pws: #updated 2024-07-02
-    type: collection
-    title: Public Water Systems
-    description: Public Water Systems from United States EPA Safe Drinking Water Information System
-    keywords:
-      - Public Water Systems
-      - EPA
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/pws
-    links:
-      - <<: *data_link
-        title: EPA PWSID List source
-        href: https://echo.epa.gov/tools/data-downloads/sdwa-download-summary
-      - <<: *data_link
-        title: Geographic data source
-        href: https://github.com/cgs-earth/ref_pws
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: pwsid
-        title_field: pws_name
-        table: ref_pws
-      - <<: *tile_defaults
-        id_field: pwsid
-        table: ref_pws
-        layer: pws
-        min_pixel: 1024
-  states:
-    type: collection
-    title: States
-    description: States from United States Census Bureau Cartographic Boundaries
-    keywords:
-      - States
-      - Census
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          name: schema:name
-          census_profile:
-            "@id": schema:subjectOf
-            "@type": "@id"
-    links:
-      - <<: *data_link
-        title: Geographic data source
-        href: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
-      - <<: *data_link
-        title: Census data source
-        href: https://data.census.gov/cedsci
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: geoid
-        table: states
-      - <<: *tile_defaults
-        id_field: geoid
-        table: states
-  counties:
-    type: collection
-    title: Counties
-    description: Counties from United States Census Bureau Cartographic Boundaries
-    keywords:
-      - Counties
-      - Census
-    templates: 
-      path: /pygeoapi/pygeoapi/templates/jsonld/counties
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          name: schema:name
-          census_profile:
-            "@id": schema:subjectOf
-            "@type": "@id"
-    links:
-      - <<: *data_link
-        title: Geographic data source
-        href: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
-      - <<: *data_link
-        title: Census data source
-        href: https://data.census.gov/cedsci
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: geoid
-        table: counties
-      - <<: *tile_defaults
-        id_field: geoid
-        table: counties
-  aiannh:
-    type: collection
-    title: American Indian/Alaska Native Areas/Hawaiian Home Lands
-    description: Federally recognized American Indian/Alaska Native Areas/Hawaiian Home Lands (AIANNH)
-    keywords:
-      - American Indian Areas
-      - Alaska Native Areas
-      - Hawaiian Home Lands
-      - Census
-    linked-data:
-      context:
-        - name: https://schema.org/name
-    links:
-      - <<: *data_link
-        title: Geographic data source
-        href: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: geoid
-        table: aiannh
-      - <<: *tile_defaults
-        id_field: geoid
-        table: aiannh
-        disable_at_z: 0
-  cbsa:
-    type: collection
-    title: Core-based statistical areas
-    description: United States Metropolitan and Micropolitan Statistical Areas
-    keywords:
-      - CBSA
-      - Census
-    linked-data:
-      context:
-        - name: https://schema.org/name
-    links:
-      - <<: *data_link
-        title: Geographic data source
-        href: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: geoid
-        table: cbsa
-      - <<: *tile_defaults
-        id_field: geoid
-        table: cbsa
-        disable_at_z: 0
-  ua10:
-    type: collection
-    title: Urban Areas
-    description: United States Urbanized Areas and Urban Clusters from the 2010 Census
-    keywords:
-      - Urban Areas
-      - Census
-    linked-data:
-      context:
-        - name10: https://schema.org/name
-    links:
-      - <<: *data_link
-        title: Geographic data source
-        href: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
-      - <<: *data_link
-        title: Descriptive data source
-        href: https://www.census.gov/programs-surveys/geography/guidance/geo-areas/urban-rural/2010-urban-rural.html
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: geoid10
-        title_field: name10
-        table: ua10
-      - <<: *tile_defaults
-        id_field: geoid10
-        table: ua10
-        disable_at_z: 0
-  places:
-    type: collection
-    title: Places
-    description: United States legally incorporated and Census designated places
-    keywords:
-      - Places
-      - Census
-    linked-data:
-      context:
-        - schema: https://schema.org/
-          name: schema:name
-          census_profile:
-            "@id": schema:subjectOf
-            "@type": "@id"
-    links:
-      - <<: *data_link
-        title: Geographic data source
-        href: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
-      - <<: *data_link
-        title: Census data source
-        href: https://data.census.gov/cedsci
-    extents: *extents
-    providers:
-      - <<: *provider_defaults
-        name: PostgreSQL
-        id_field: geoid
-        table: places
-      - <<: *tile_defaults
-        id_field: geoid
-        table: places
-        disable_at_z: 0
-  intersector:
-    type: process
-    processor:
-      name: pygeoapi_plugins.process.intersect.IntersectionProcessor
-  sitemap:
-    type: stac-collection
-    title: sitemap
-    description: geoconnex.us sitemap
-    keywords:
-      - Geoconnex
-      - Sitemap
+    title: Geoconnex Features 
+    description: All geospatial features in the Geoconnex graph database, provided as OGC API Features
+    provider-name:
       - Internet of Water
     links:
-      - <<: *data_link
-        title: information
-        href: https://geoconnex.us
-      - <<: *data_link
-        title: sitemap
-        href: https://geoconnex.us/sitemap.xml
+      - type: application/html
+        rel: canonical
+        title: Geoconnex registry
+        href: https://github.com/internetofwater/geoconnex.us
+    keywords:
+      en:
+        - geoconnex
     extents:
       spatial:
-        bbox: [-180, -90, 180, 90]
+        bbox: [-114.816591,31.332177,-109.045172,37.003725]
         crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
+      temporal:
+        begin: 1902-03-31T00:00:00Z 
+        end: 2025-09-09T06:00:00Z
+        trs: http://www.opengis.net/def/uom/ISO-8601/0/Gregorian 
     providers:
-      - type: stac
-        name: FileSystemXML
-        data: /sitemap
-        file_types:
-          - .xml
+      - type: feature
+        name: PostgreSQL
+        data:
+          host: ${POSTGRES_HOST:-localhost}
+          dbname: ${POSTGRES_DB:-edr}
+          user: ${POSTGRES_USER:-postgres}
+          password: ${POSTGRES_PASSWORD:-password}
+          search_path: [public]
+        table: geoconnex_features
+        id_field: id
+        geom_field: geom

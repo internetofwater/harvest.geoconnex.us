@@ -1,7 +1,7 @@
 resource "google_cloud_run_v2_service" "pygeoapi" {
-  name = "pygeoapi"
-  location = var.region
-  deletion_protection = false 
+  name                = "pygeoapi"
+  location            = var.region
+  deletion_protection = false
 
   ingress = "INGRESS_TRAFFIC_ALL"
 
@@ -11,8 +11,17 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
     scaling_mode       = "AUTOMATIC"
   }
 
-  template {
 
+
+
+  template {
+    volumes {
+      name = "config-volume"
+      gcs {
+        bucket = var.config_bucket
+      }
+    }
+    # dont think we need jobs for now so this is commented out
     # volumes {
     #   name = "job-store"
     #   gcs {
@@ -25,53 +34,56 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
       ports {
         container_port = 80
       }
-    #   volume_mounts {
-    #     name       = "job-store"
-    #     mount_path = "/job_results"
-    #   }
+      #   volume_mounts {
+      #     name       = "job-store"
+      #     mount_path = "/job_results"
+      #   }
 
       # ideally this would be set here; however, that would make
       # the cloud run service dependent on itself which terraform
       # does not allow; thus this needs to be set manually after deployment
-      
+
       # env {
       #   name= "PYGEOAPI_URL"
       #   value = google_cloud_run_v2_service.pygeoapi.uri
       # }
 
-    #   env {
-    #     name = "PYGEOAPI_JOB_RESULT_DIR"
-    #     value = "/job_results"
-    #   }
-
+      #   env {
+      #     name = "PYGEOAPI_JOB_RESULT_DIR"
+      #     value = "/job_results"
+      #   }
       env {
-        name = "TF_VAR_POSTGRES_HOST"
+        name  = "PYGEOAPI_CONFIG"
+        value = "/config/pygeoapi/pygeoapi.config.yml"
+      }
+      env {
+        name  = "POSTGRES_HOST"
         value = "/cloudsql/${google_sql_database_instance.postgis.connection_name}"
       }
 
       env {
-        name = "TF_VAR_POSTGRES_USER"
+        name  = "POSTGRES_USER"
         value = var.POSTGRES_USER
       }
 
       env {
-        name = "TF_VAR_POSTGRES_PASSWORD"
-        value = var.database_password
+        name  = "POSTGRES_PASSWORD"
+        value = var.POSTGRES_PASSWORD
       }
 
       env {
-        name = "TF_VAR_POSTGRES_DB"
+        name  = "POSTGRES_DB"
         value = var.POSTGRES_DB
       }
 
-    #   env {
-    #     name = "REDIS_HOST"
-    #     value = google_redis_instance.redis.host
-    #   }
+      #   env {
+      #     name = "REDIS_HOST"
+      #     value = google_redis_instance.redis.host
+      #   }
 
       resources {
         limits = {
-          cpu = "3"
+          cpu    = "3"
           memory = "2GiB"
         }
         cpu_idle = false
@@ -85,4 +97,18 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
 
+}
+
+
+resource "google_storage_bucket_object" "pygeoapi_config" {
+  name   = "pygeoapi/pygeoapi.config.yml"
+  bucket = var.config_bucket
+  source = "${path.module}/pygeoapi.config.yml"
+}
+
+
+resource "google_storage_bucket_iam_member" "pygeoapi_access" {
+  bucket = var.config_bucket
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${var.service_account_email}"
 }

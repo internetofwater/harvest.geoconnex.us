@@ -65,6 +65,17 @@ module "graphdb" {
   allowed_ingress_cidrs = ["10.0.0.0/8", "192.168.0.0/16", "35.191.0.0/16"]
 }
 
+module "pygeoapi" {
+  source = "./pygeoapi"
+  region = var.region
+  config_bucket      = module.storage.s3_bucket   # or another GCS bucket
+  POSTGRES_PASSWORD = var.database_password
+  POSTGRES_USER     = module.database.database_user
+  POSTGRES_DB       = var.database
+  POSTGRES_HOST     = module.database.private_ip_address
+  service_account_email = var.service_account_email
+}
+
 data "google_compute_instance" "graphdb" {
   name    = "graphdb" 
   project = var.project
