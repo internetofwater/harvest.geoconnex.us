@@ -8,7 +8,7 @@ resource "google_sql_database_instance" "postgres" {
     tier            = "db-custom-1-3840"
     disk_autoresize = true
     ip_configuration {
-      ipv4_enabled  = false
+      ipv4_enabled  = true
       private_network = var.network
     }
     database_flags {

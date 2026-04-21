@@ -88,6 +88,13 @@ resource "google_cloud_run_v2_service" "pygeoapi" {
   }
 }
 
+resource "google_cloud_run_v2_service_iam_member" "public_access" {
+  location = google_cloud_run_v2_service.pygeoapi.location
+  project  = google_cloud_run_v2_service.pygeoapi.project
+  name     = google_cloud_run_v2_service.pygeoapi.name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
 
 resource "google_storage_bucket_object" "pygeoapi_config" {
   name   = "pygeoapi/pygeoapi.config.yml"
