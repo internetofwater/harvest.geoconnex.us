@@ -15,6 +15,11 @@ resource "google_sql_database_instance" "postgres" {
       name  = "cloudsql.enable_pg_cron"
       value = "on"
     }
+
+    database_flags {
+      name  = "cloudsql.enable_pg_extensions"
+      value = "postgis"
+    }
     database_flags {
       name  = "max_connections"
       value = "1000"
