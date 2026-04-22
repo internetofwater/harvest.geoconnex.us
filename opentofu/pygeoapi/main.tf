@@ -1,5 +1,5 @@
 resource "google_cloud_run_v2_service" "pygeoapi" {
-  name                = "geoconex_features_pygeoapi"
+  name                = "pygeoapi"
   location            = var.region
   deletion_protection = false
 
