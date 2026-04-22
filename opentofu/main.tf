@@ -65,7 +65,7 @@ module "graphdb" {
   allowed_ingress_cidrs = ["10.0.0.0/8", "192.168.0.0/16", "35.191.0.0/16"]
 }
 
-module "geoconex_features_pygeoapi" {
+module "geoconnex_features_pygeoapi" {
   source = "./pygeoapi"
   region = var.region
   config_bucket      = module.storage.s3_bucket
