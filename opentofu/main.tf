@@ -66,7 +66,7 @@ module "graphdb" {
 }
 
 module "geoconex_features_pygeoapi" {
-  source = "./geoconex_features_pygeoapi"
+  source = "./pygeoapi"
   region = var.region
   config_bucket      = module.storage.s3_bucket
   POSTGRES_PASSWORD = var.database_password
