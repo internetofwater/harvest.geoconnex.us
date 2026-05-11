@@ -33,6 +33,8 @@ resource "google_compute_instance" "qlever_vm" {
     set -eux
 
     # Step 1: Update and install prerequisites
+
+    useradd -r -m -s /bin/false qlever || true
     apt update -y
     apt install -y git wget google-cloud-cli python3-full
     curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
@@ -40,6 +42,7 @@ resource "google_compute_instance" "qlever_vm" {
     curl -sSL https://cgs-earth.github.io/script-cache/install_caddy.sh | bash
 
     # Step 2: Format SSD disk and mount to /data
+
     DISK="/dev/disk/by-id/google-persistent-disk-0"
     if ! blkid $DISK; then
         mkfs.ext4 -F $DISK
@@ -48,34 +51,34 @@ resource "google_compute_instance" "qlever_vm" {
     UUID=$(blkid -s UUID -o value $DISK)
     grep -q "$UUID" /etc/fstab || echo "UUID=$UUID /data ext4 defaults,nofail 0 2" >> /etc/fstab
     mount -a
-    useradd -r -m -s /bin/false qlever || true
 
     # Step 3: Pull data from Cloud Storage
+
     gsutil -m cp -r \
       gs://${var.s3_bucket}/geoconnex_index/* \
       /data/ || true
     chown -R qlever:qlever /data
 
     # Step 4: Install Qlever
-    python3 -m venv --system-site-packages /venv
-    git clone https://github.com/ad-freiburg/qlever-control
-    cd qlever-control
-    /venv/bin/python3 -m pip install -e ".[dev]"
+
     curl -sSL https://cgs-earth.github.io/script-cache/install_qlever.sh | bash
 
     # Step 5: Configure Caddy to reverse proxy to Qlever
-    # cat <<CADDYFILE | sudo tee /etc/caddy/Caddyfile > /dev/null
-    # ${var.qlever_url} {
-    #         reverse_proxy :8888
-    # }
-    # CADDYFILE
-    # systemctl restart caddy
+
+    cat <<CADDYFILE | sudo tee /etc/caddy/Caddyfile > /dev/null
+    ${var.qlever_url} {
+            reverse_proxy :8888
+    }
+    CADDYFILE
+    systemctl restart caddy
 
     # Step 6: Keep index live
+    #
     # curl -sSL https://raw.githubusercontent.com/cgs-earth/script-cache/refs/heads/gcp-fuse/install_gcsfuse.sh | bash
     # gcsfuse --only-dir geoconnex_index ${var.s3_bucket} /data
 
     # Step 7: Start Qlever
+    #
     sudo -u qlever qlever-server -i /data/geoconnex -j 16 -p 8888 -s 300s
 
   EOF
