@@ -16,9 +16,6 @@ resource "google_compute_instance" "harvest_vm" {
 
   network_interface {
     network = var.network_name
-    access_config {
-      nat_ip = var.static_ip
-    }
   }
 
   service_account {
@@ -44,6 +41,7 @@ resource "google_compute_instance" "harvest_vm" {
     # Step 2: Install Scheduler
     echo "Downloading Scheduler" >> /var/log/startup.log
     sudo git clone --branch "${var.scheduler_version}" https://github.com/internetofwater/scheduler.git /opt/scheduler
+
 
     # Step 3: Set up Scheduler Environment
     cd /opt/scheduler
