@@ -60,7 +60,6 @@ resource "google_compute_instance" "qlever_vm" {
     chown -R qlever:qlever /data
 
     # Step 4: Install Qlever
-
     curl -sSL https://cgs-earth.github.io/script-cache/install_qlever.sh | bash
 
     # Step 5: Configure Caddy to reverse proxy to Qlever
@@ -74,11 +73,11 @@ resource "google_compute_instance" "qlever_vm" {
 
     # Step 6: Keep index live
     #
-    # curl -sSL https://raw.githubusercontent.com/cgs-earth/script-cache/refs/heads/gcp-fuse/install_gcsfuse.sh | bash
+    # curl -sSL https://cgs-earth.github.io/script-cache/install_gcsfuse.sh | bash
     # gcsfuse --only-dir geoconnex_index ${var.s3_bucket} /data
 
     # Step 7: Start Qlever
-    #
+    
     sudo -u qlever qlever-server -i /data/geoconnex -j 16 -p 8888 -s 300s
 
   EOF
