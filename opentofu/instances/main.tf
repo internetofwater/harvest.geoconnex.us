@@ -16,6 +16,9 @@ resource "google_compute_instance" "harvest_vm" {
 
   network_interface {
     network = var.network_name
+    access_config {
+      // Ephemeral public IP
+    }
   }
 
   service_account {
