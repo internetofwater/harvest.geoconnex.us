@@ -101,7 +101,6 @@ resource "google_compute_instance" "harvest_vm" {
 
     echo "Pulling Scheduler images" >> /var/log/startup.log
     make pull
-    make prodBuild
 
     # Step 4: Run Scheduler
     nohup make cloudProd
