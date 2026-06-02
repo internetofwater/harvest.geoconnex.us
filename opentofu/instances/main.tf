@@ -77,11 +77,6 @@ resource "google_compute_instance" "harvest_vm" {
     S3_METADATA_BUCKET=${var.s3_metadata_bucket}
     S3_REGION=${var.s3_region}
 
-    # GraphDB
-    TRIPLESTORE_URL=${var.graph_url}
-    DATAGRAPH_REPOSITORY=${var.data_graph}
-    PROVGRAPH_REPOSITORY=${var.prov_graph}
-
     # Database
     DAGSTER_POSTGRES_HOST=${var.database_host}
     DAGSTER_POSTGRES_USER=${var.database_user}
@@ -99,8 +94,7 @@ resource "google_compute_instance" "harvest_vm" {
 
     ENV
 
-    echo "Pulling Scheduler images" >> /var/log/startup.log
-    make pull
+    echo "Starting Scheduler images" >> /var/log/startup.log
 
     # Step 4: Run Scheduler
     nohup make cloudProd
