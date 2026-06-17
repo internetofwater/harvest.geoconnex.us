@@ -2,6 +2,7 @@ resource "google_compute_instance" "qlever_vm" {
   name         = "${var.name}-qlever-vm"
   machine_type = var.qlever_machine_type
   zone         = var.zone
+  allow_stopping_for_update = true
   metadata     = {
     enable-osconfig = "TRUE"
   }
@@ -14,7 +15,6 @@ resource "google_compute_instance" "qlever_vm" {
       type  = "pd-ssd"
     }
   }
-
   network_interface {
     network = var.network_name
     access_config {
@@ -77,8 +77,9 @@ resource "google_compute_instance" "qlever_vm" {
     # gcsfuse --only-dir geoconnex_index ${var.s3_bucket} /data
 
     # Step 7: Start Qlever
-    
-    sudo -u qlever qlever-server -i /data/geoconnex -j 16 -p 8888 -s 300s
+
+    cd /data
+    qlever-server -i geoconnex -j 16 -p 8888 -s 300s
 
   EOF
 }
