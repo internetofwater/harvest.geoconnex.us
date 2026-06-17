@@ -11,6 +11,12 @@ variable "instance_os" {
 variable "disk_size" {
   description = "Boot disk size for each VM instance (in GB)"
   type        = number
+  default     = 128
+}
+
+variable "qlever_disk_size" {
+  description = "Boot disk size for each VM instance (in GB)"
+  type        = number
   default     = 80
 }
 

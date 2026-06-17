@@ -11,7 +11,7 @@ resource "google_compute_instance" "qlever_vm" {
   boot_disk {
     initialize_params {
       image = "debian-cloud/${var.instance_os}"
-      size  = var.disk_size
+      size  = var.qlever_disk_size
       type  = "pd-ssd"
     }
   }
