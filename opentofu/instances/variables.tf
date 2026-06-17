@@ -30,13 +30,13 @@ variable "enable_public_url" {
 variable "machine_type" {
   description = "Machine type for GCP instances (overrides instance_type in production)"
   type        = string
-  default     = "e2-highcpu-16"
+  default     = "e2-highmem-8"
 }
 
 variable "qlever_machine_type" {
   description = "Machine type for GCP instances (overrides instance_type in production)"
   type        = string
-  default     = "e2-highcpu-16"
+  default     = "e2-highmem-8"
 }
 
 variable "zone" {
