@@ -11,6 +11,12 @@ variable "instance_os" {
 variable "disk_size" {
   description = "Boot disk size for each VM instance (in GB)"
   type        = number
+  default     = 128
+}
+
+variable "qlever_disk_size" {
+  description = "Boot disk size for each VM instance (in GB)"
+  type        = number
   default     = 80
 }
 
@@ -30,13 +36,13 @@ variable "enable_public_url" {
 variable "machine_type" {
   description = "Machine type for GCP instances (overrides instance_type in production)"
   type        = string
-  default     = "e2-highcpu-16"
+  default     = "e2-highmem-8"
 }
 
 variable "qlever_machine_type" {
   description = "Machine type for GCP instances (overrides instance_type in production)"
   type        = string
-  default     = "e2-highcpu-16"
+  default     = "e2-highmem-8"
 }
 
 variable "zone" {

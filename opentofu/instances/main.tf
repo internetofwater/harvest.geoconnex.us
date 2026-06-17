@@ -2,6 +2,7 @@ resource "google_compute_instance" "harvest_vm" {
   name         = var.name
   machine_type = var.machine_type
   zone         = var.zone
+  allow_stopping_for_update = true
   metadata     = {
     enable-osconfig = "TRUE"
   }
@@ -11,6 +12,7 @@ resource "google_compute_instance" "harvest_vm" {
     initialize_params {
       image = "debian-cloud/${var.instance_os}"
       size  = var.disk_size
+      type  = "pd-ssd"
     }
   }
 
